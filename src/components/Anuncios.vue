@@ -28,7 +28,6 @@
           <template v-if="$vuetify.breakpoint.mdAndUp">
             <v-spacer></v-spacer>
             <v-select
-              outlined
               dense
               v-model="sortBy"
               flat
@@ -63,6 +62,15 @@
             </v-btn-toggle>        
           </template>
           <span class="grey--text ml-2" v-if="$vuetify.breakpoint.mdAndUp">Mostrar</span>
+          <DialogFilters 
+          v-if="$vuetify.breakpoint.mobile"
+          :marcasSelected="localMarca"
+          :sistemasSelected="localSistema"
+          :precioSelected="localPrecio"
+          :marcas="marcas"
+          :sistemas="sistemas"
+          @cambio="actualizarFiltros"
+          />
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -201,7 +209,6 @@
             :total-visible="5"
             v-model="page"
             :length="numberOfPages"
-            circle
           ></v-pagination>
         </div>
       </template>
@@ -210,13 +217,20 @@
 </template>
 <script>
 import { mapState,mapMutations} from 'vuex';
+import DialogFilters from '../components/DialogFilters';
 import moment from 'moment';
 moment.locale('es');
   export default {
       name:'anuncios',
+      components:{DialogFilters},
       props:{
           items:Array,
-          loading:Boolean
+          loading:Boolean,
+          marcasSelected:Array,
+          sistemasSelected:Array,
+          precioSelected:Object,
+          marcas:Array,
+          sistemas:Array
       },
     data () {
       return {
@@ -244,6 +258,9 @@ moment.locale('es');
           'Creado'
         ],
       selection: 1,
+      localMarca:[],
+        localSistema:[],
+        localPrecio:{min:undefined,max:undefined}
       }
     },
     computed: {
@@ -272,6 +289,9 @@ moment.locale('es');
       },
       momentL(s){
          return moment(s,'X').fromNow();
+      },
+      actualizarFiltros(nuevo){
+        this.$emit('cambio',nuevo);
       }
     },
   }

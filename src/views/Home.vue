@@ -1,67 +1,27 @@
 <template>
   <div class="home grey lighten-4 rounded">
     <v-row>
-      <v-col cols="12" sm="2" v-if="$vuetify.breakpoint.mdAndUp">
-        <v-row no-gutters>
-          <v-col cols="12" class="pl-3">
-            <span>Filtros</span>
-            <v-checkbox
-            hide-details
-            v-model="marcasSelected"
-            label="Samsung"
-            value="Samsung"
-            dense
-          ></v-checkbox>
-          <v-checkbox
-            hide-details
-            v-model="marcasSelected"
-            label="Huawei"
-            value="Huawei"
-            dense
-          ></v-checkbox>
-          <v-checkbox
-            hide-details
-            v-model="sistemasSelected"
-            label="Android"
-            value="Android"
-            dense
-          ></v-checkbox>
-          <v-checkbox
-            hide-details
-            v-model="sistemasSelected"
-            label="Ios"
-            value="Ios"
-            dense
-          ></v-checkbox>
-           <v-checkbox
-            hide-details
-            v-model="pantallasSelected"
-            label="precio<$100"
-            value="7"
-            dense
-          ></v-checkbox>
-          <v-checkbox
-            hide-details
-            v-model="pantallasSelected"
-            label="precio>$100"
-            value="6"
-            dense
-          ></v-checkbox>
-          </v-col>
-        </v-row>
+      <v-col cols="12" sm="2" v-if="!$vuetify.breakpoint.mobile">
+        <Filters
+        :marcasSelected="marcasSelected"
+        :sistemasSelected="sistemasSelected"
+        :precioSelected="precioSelected"
+        :marcas="marcas"
+        :sistemas="sistemas"
+        @cambio="actualizarFiltros"
+        />
       </v-col>
-      <v-col cols="12" v-else>
-            <v-select
-            v-model="value"
-            :items="items"
-            chips
-            label="Filtros"
-            multiple
-            outlined
-          ></v-select>
-        </v-col>
-      <v-col cols="12" sm="10">
-        <Anuncios :items="AnunciosFiltrados" :loading="loadingData"/>
+  
+      <v-col cols="12" lg="10">
+        <Anuncios 
+        :marcasSelected="marcasSelected"
+        :sistemasSelected="sistemasSelected"
+        :precioSelected="precioSelected"
+        :marcas="marcas"
+        :sistemas="sistemas"
+        @cambio="actualizarFiltros"
+        :items="AnunciosFiltrados" 
+        :loading="loadingData"/>
       </v-col>
     </v-row>
 
@@ -70,26 +30,25 @@
 
 <script>
 // @ is an alias to /src
+import DialogFilters from '../components/DialogFilters'
 import Anuncios from '../components/Anuncios';
+import Filters from '../components/Filters'
 import {storage,db} from '../database/firebase';
 import {mapState} from 'vuex';
 var ref=storage.ref();
 export default {
   name: 'Home',
   components: {
-    Anuncios
+    Anuncios,DialogFilters,Filters
   },
   data () {
     return{
       loadingData:false,
       marcasSelected:[],
       sistemasSelected:[],
-      precioSelected:[],
-      pantallasSelected:[],
+      precioSelected:{min:undefined,max:undefined},
        marcas:['Samsung','Apple','Huawei','LG'],
        sistemas:['Android','Ios','Windows Phone'],
-       items: ['foo', 'bar', 'fizz', 'buzz'],
-      value: ['foo', 'bar', 'fizz', 'buzz'],
       anuncios:[],
     }
   },
@@ -115,7 +74,6 @@ export default {
       }
       
       anunciosLocal.forEach(an=>{
-        //console.log(an.creado.seconds);
         an.imagenes=[];
       });
 
@@ -135,13 +93,25 @@ export default {
                   }
             }); 
           }) 
+    },
+    actualizarFiltros(nuevo){
+      console.log(nuevo);
+      this.marcasSelected=nuevo.localMarca;
+      this.sistemasSelected=nuevo.localSistema;
+      this.precioSelected=nuevo.localPrecio;
     }
   },
   computed:{
     ...mapState(['agrego']),
     AnunciosFiltrados(){
-      var condicion = { marca: "", sistema: ""};
+      var condicion = { marca: "", sistema: "",precio:""};
       var arrayFiltrado = [];
+      if(typeof this.precioSelected.min=='number' && typeof this.precioSelected.max=='number'){
+        condicion.precio="anuncio['precio']>="+this.precioSelected.min+"&&"+"anuncio['precio']<="+this.precioSelected.max;
+      }else{
+        condicion.precio="anuncio['precio']>="+0;
+      }
+
       if (this.marcasSelected.length > 0) {
         this.marcasSelected.forEach((marca) => {
           condicion.marca = condicion.marca.concat("anuncio['marca']=='",marca,"'||");
@@ -167,10 +137,10 @@ export default {
 
       arrayFiltrado = this.anuncios.filter(function(anuncio) {
         return (
-          eval(condicion.marca) && eval(condicion.sistema) //&& eval(condicion.precio)
+          eval(condicion.marca) && eval(condicion.sistema) && eval(condicion.precio)
         );
       });
-      
+      //console.log(condicion.precio);
       return arrayFiltrado;
     }
   },

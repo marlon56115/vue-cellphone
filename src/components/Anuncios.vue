@@ -1,22 +1,22 @@
 <template>
   <v-container fluid>
     <v-data-iterator
+      loading="true"
       :items="items"
       :items-per-page.sync="itemsPerPage"
       :page="page"
       :search="search"
       :sort-by="sortBy.toLowerCase()"
       :sort-desc="sortDesc"
-      :loading="loading"
       hide-default-footer
     >
       <template v-slot:header>
         <v-toolbar
           
-          class="mb-1 elevation-0 grey lighten-4 rounded "
+          class=" elevation-0 grey lighten-4 rounded "
         >
           <v-text-field
-            outlined
+            
             dense
             v-model="search"
             clearable
@@ -37,6 +37,7 @@
               prepend-inner-icon="mdi-magnify"
               label="Ordenar por"
             ></v-select>
+            
             <v-spacer></v-spacer>
             <v-btn-toggle
               v-model="sortDesc"
@@ -45,32 +46,23 @@
               <v-btn
               class="white"
                 
-                large
-                depressed
                 :value="false"
+                small
               >
                 <v-icon >mdi-arrow-up</v-icon>
               </v-btn>
               <v-btn
+              small
                 class="white"
-                large
-                depressed
+                
                 :value="true"
               >
                 <v-icon>mdi-arrow-down</v-icon>
               </v-btn>
             </v-btn-toggle>        
           </template>
+          <DialogFilters v-if="$vuetify.breakpoint.mdAndDown"/>
           <span class="grey--text ml-2" v-if="$vuetify.breakpoint.mdAndUp">Mostrar</span>
-          <DialogFilters 
-          v-if="$vuetify.breakpoint.mobile"
-          :marcasSelected="localMarca"
-          :sistemasSelected="localSistema"
-          :precioSelected="localPrecio"
-          :marcas="marcas"
-          :sistemas="sistemas"
-          @cambio="actualizarFiltros"
-          />
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -97,7 +89,14 @@
           </v-menu> 
         </v-toolbar>
       </template>
-
+      <template v-slot:loading>
+          <v-progress-linear
+            color="black"
+            indeterminate
+            rounded
+            height="6"
+          ></v-progress-linear>
+      </template>
       <template v-slot:default="props">
         <v-row no-gutters>
           <v-col
@@ -110,9 +109,13 @@
             max-height="500"
             class="px-2"
           >
+          <v-skeleton-loader
+          type="card-avatar, article, actions"
+          v-if="loading"
+        ></v-skeleton-loader>
             <v-card
             :loading="loading"
-            class="mx-auto my-12"
+            class="mx-auto my-2"
             max-width="374"
             
         >
@@ -125,15 +128,13 @@
             </template>
 
             <v-img
-            height="250"
+            height="200"
             :src="item.imagenes[0]"
             ></v-img>
 
-            <v-card-title class="text-truncate">{{item.titulo}}</v-card-title>
-
+            <v-card-title class="text-truncate mt-n2 mb-n5">{{item.titulo}}</v-card-title>
             <v-card-text>
             <v-row
-            
                 align="center"
                 class="mx-0"
                 no-gutters
@@ -156,45 +157,58 @@
             <v-col>
               {{momentL(item.creado.seconds)}}
             </v-col>
-                
             </v-row>
-
+          <v-chip
+            class=""
+            color="light"
+            outlined
+            x-small
+          >
+            <v-icon left small>
+              mdi-account
+            </v-icon>
+            {{item.vendedor}}
+          </v-chip>
             
-
             </v-card-text>
 
             <v-divider class="mx-4"></v-divider>
 
-
-            <v-card-text>
+            <v-card-text class="my-n3">
             <v-chip-group
                 v-model="selection"
                 active-class="deep-purple accent-4 white--text"
                 column
             >
-                <v-chip>{{item.modelo}}</v-chip>
+                <v-chip small>{{item.modelo}}</v-chip>
 
-                <v-chip>{{item.marca}}</v-chip>
+                <v-chip small>{{item.marca}}</v-chip>
 
-                <v-chip>{{item.sistema}}</v-chip>
+                <v-chip small>{{item.sistema}}</v-chip>
 
             </v-chip-group>
             </v-card-text>
 
-            <v-card-actions>
+            <v-card-actions class="grey lighten-3 mt-n4">
 
-              <v-btn  @click="goToAnuncio(item)">
+              <v-btn  @click="goToAnuncio(item)"
+              class="ml-4"
+              color="secondary lighten-3"
+              small
+              >
                 Detalles
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn 
-              icon 
               @click="addToCart(item)"
+              class="mr-4"
+              
                fab
                dark
-                color="indigo">
-                <v-icon>mdi-cart-plus</v-icon>
+               small
+              color="primary elevation-0">
+                <v-icon dark>mdi-cart-plus</v-icon>
               </v-btn>
             </v-card-actions>
         </v-card>
@@ -219,6 +233,7 @@
 import { mapState,mapMutations} from 'vuex';
 import DialogFilters from '../components/DialogFilters';
 import moment from 'moment';
+
 moment.locale('es');
   export default {
       name:'anuncios',
@@ -226,11 +241,6 @@ moment.locale('es');
       props:{
           items:Array,
           loading:Boolean,
-          marcasSelected:Array,
-          sistemasSelected:Array,
-          precioSelected:Object,
-          marcas:Array,
-          sistemas:Array
       },
     data () {
       return {
@@ -258,12 +268,10 @@ moment.locale('es');
           'Creado'
         ],
       selection: 1,
-      localMarca:[],
-        localSistema:[],
-        localPrecio:{min:undefined,max:undefined}
       }
     },
     computed: {
+      ...mapState(['agrego']),
       numberOfPages () {
         return Math.ceil(this.items.length / this.itemsPerPage)
       },

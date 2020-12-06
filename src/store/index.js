@@ -11,9 +11,24 @@ export default new Vuex.Store({
     especificaciones:[],
     carrito:[],
     carritoDetalles:[],
-    agrego:false
+    agrego:false,
+    marcasSelected:[],
+    sistemasSelected:[],
+    estadosSelected:[],
+    precioSelected:{min:undefined,max:undefined},
+    marcas:['Samsung','Apple','Huawei','LG'],
+    sistemas:['Android','Ios','Windows Phone'],
+    estados:['Nuevo','Usado','Semi-usado','Dañado']
+
   },
   mutations: {
+    actualizarFiltros(state,nuevo){
+      console.log(nuevo);
+      state.marcasSelected=nuevo.localMarca;
+      state.sistemasSelected=nuevo.localSistema;
+      state.estadosSelected=nuevo.localEstados;
+      state.precioSelected=nuevo.localPrecio;
+    },
     agregoChange(state){
       state.agrego=!state.agrego;
     },

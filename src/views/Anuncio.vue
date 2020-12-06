@@ -26,7 +26,27 @@
               <p class="font-weight-black text-h4">${{anuncioDetalle.precio}}</p>
               <p class="text-decoration-line-through ">${{anuncioDetalle.precio-5}}</p>
               <p class="d-inline mt-1"> <strong> Vendedor:</strong> {{anuncioDetalle.vendedor}} </p>
-               <p class="d-inline"> <strong> Telefono:</strong> {{anuncioDetalle.telefono}}</p>
+              <p class="d-inline"> <strong> Telefono:</strong> {{anuncioDetalle.telefono}}</p>
+              <v-row
+                align="center"
+                class="mx-0"
+                no-gutters
+            >
+            <v-col>
+              <v-rating
+                :value="Math.floor(Math.random()*10)"
+                color="amber"
+                dense
+                half-increments
+                readonly
+                size="14"
+                ></v-rating>
+            </v-col>
+            <v-col>
+              {{momentL(anuncioDetalle.creado.seconds)}}
+            </v-col>
+            </v-row>
+               
             </v-card-text>
             <v-card-actions>
               <v-btn  >
@@ -87,6 +107,8 @@
 
 <script>
 import { mapState} from 'vuex';
+import moment from 'moment';
+moment.locale('es');
 export default {
     name:'anuncio',
     data() {
@@ -97,6 +119,11 @@ export default {
     },
     computed: {
       ...mapState(['anuncioDetalle','especificaciones'])
+      },
+      methods: {
+        momentL(s){
+         return moment(s,'X').fromNow();
+      }
       }
 }
 </script>

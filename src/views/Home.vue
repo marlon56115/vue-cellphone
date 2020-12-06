@@ -1,25 +1,11 @@
 <template>
   <div class="home grey lighten-4 rounded">
     <v-row>
-      <v-col cols="12" sm="2" v-if="!$vuetify.breakpoint.mobile">
-        <Filters
-        :marcasSelected="marcasSelected"
-        :sistemasSelected="sistemasSelected"
-        :precioSelected="precioSelected"
-        :marcas="marcas"
-        :sistemas="sistemas"
-        @cambio="actualizarFiltros"
-        />
+      <v-col cols="12" sm="2" v-if="$vuetify.breakpoint.lgAndUp">
+        <Filters/>
       </v-col>
-  
-      <v-col cols="12" lg="10">
+      <v-col cols="12" lg="10" >
         <Anuncios 
-        :marcasSelected="marcasSelected"
-        :sistemasSelected="sistemasSelected"
-        :precioSelected="precioSelected"
-        :marcas="marcas"
-        :sistemas="sistemas"
-        @cambio="actualizarFiltros"
         :items="AnunciosFiltrados" 
         :loading="loadingData"/>
       </v-col>
@@ -34,7 +20,7 @@ import DialogFilters from '../components/DialogFilters'
 import Anuncios from '../components/Anuncios';
 import Filters from '../components/Filters'
 import {storage,db} from '../database/firebase';
-import {mapState} from 'vuex';
+import {mapState,mapMutations} from 'vuex';
 var ref=storage.ref();
 export default {
   name: 'Home',
@@ -44,19 +30,15 @@ export default {
   data () {
     return{
       loadingData:false,
-      marcasSelected:[],
-      sistemasSelected:[],
-      precioSelected:{min:undefined,max:undefined},
-       marcas:['Samsung','Apple','Huawei','LG'],
-       sistemas:['Android','Ios','Windows Phone'],
       anuncios:[],
     }
   },
   created (){
-    this.traerAnuncios();
+    this.traerAnuncios(); 
   },
   
   methods:{
+    ...mapMutations(['actualizarFiltros']),
      async  traerAnuncios(){
       var anunciosLocal=[];
       this.loadingData=true;
@@ -78,7 +60,6 @@ export default {
       });
 
       this.insertarImagenes(anunciosLocal);
-      this.loadingData=false;
       this.anuncios=anunciosLocal;
     },
     insertarImagenes(anunciosLocal){
@@ -93,18 +74,12 @@ export default {
                   }
             }); 
           }) 
-    },
-    actualizarFiltros(nuevo){
-      console.log(nuevo);
-      this.marcasSelected=nuevo.localMarca;
-      this.sistemasSelected=nuevo.localSistema;
-      this.precioSelected=nuevo.localPrecio;
     }
   },
   computed:{
-    ...mapState(['agrego']),
+    ...mapState(['agrego','marcasSelected','sistemasSelected','estadosSelected','precioSelected','marcas','sistemas','estados']),
     AnunciosFiltrados(){
-      var condicion = { marca: "", sistema: "",precio:""};
+      var condicion = { marca: "", sistema: "",precio:"",estado:""};
       var arrayFiltrado = [];
       if(typeof this.precioSelected.min=='number' && typeof this.precioSelected.max=='number'){
         condicion.precio="anuncio['precio']>="+this.precioSelected.min+"&&"+"anuncio['precio']<="+this.precioSelected.max;
@@ -132,15 +107,26 @@ export default {
         });
       }
 
+      if (this.estadosSelected.length > 0) {
+        this.estadosSelected.forEach((estado) => {
+          condicion.estado = condicion.estado.concat("anuncio['estado']=='", estado, "'||");
+        });
+      } else {
+        this.estados.forEach((estado) => {
+          condicion.estado = condicion.estado.concat("anuncio['estado']=='", estado, "'||");
+        });
+      }
+      
+      condicion.estado = condicion.estado.substring(0,condicion.estado.length - 2);
       condicion.marca = condicion.marca.substring(0,condicion.marca.length - 2);
       condicion.sistema = condicion.sistema.substring(0, condicion.sistema.length - 2);
 
       arrayFiltrado = this.anuncios.filter(function(anuncio) {
         return (
-          eval(condicion.marca) && eval(condicion.sistema) && eval(condicion.precio)
+          eval(condicion.marca) && eval(condicion.sistema) && eval(condicion.precio)&& eval(condicion.estado)
         );
       });
-      //console.log(condicion.precio);
+       this.loadingData=false;
       return arrayFiltrado;
     }
   },

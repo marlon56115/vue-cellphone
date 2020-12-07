@@ -37,7 +37,7 @@
 
 <script>
   export default {
-      name:'footer',
+      name:'footerv',
     data () {
       return{
       icons: [

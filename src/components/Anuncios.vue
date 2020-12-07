@@ -130,7 +130,21 @@
             <v-img
             height="200"
             :src="item.imagenes[0]"
-            ></v-img>
+            lazy-src="../assets/grey.jpg"
+            >
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular
+                  indeterminate
+                  color="grey "
+                ></v-progress-circular>
+              </v-row>
+            </template>
+            </v-img>
 
             <v-card-title class="text-truncate mt-n2 mb-n5">{{item.titulo}}</v-card-title>
             <v-card-text>
@@ -202,7 +216,7 @@
               <v-spacer></v-spacer>
               <v-btn 
               @click="addToCart(item)"
-              class="mr-4"
+              class="mr-4 "
               
                fab
                dark
@@ -283,9 +297,10 @@ moment.locale('es');
         ...mapMutations(['setAnuncioDetalle','addToCart']),
         goToAnuncio(anuncio){
             this.setAnuncioDetalle(anuncio);
-            this.$router.push('/anuncio')
+            this.$router.push({ name: 'Anuncio', params: { id: anuncio.id} });
+            //let routeData = this.$router.resolve({name: 'Anuncio'});
+            //window.open(routeData.href, '_blank');
         },
-      addCart(){},
       nextPage () {
         if (this.page + 1 <= this.numberOfPages) this.page += 1
       },

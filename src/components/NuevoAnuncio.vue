@@ -1,16 +1,6 @@
 <template>
-  <div>
     <v-dialog v-model="dialog" persistent fullscreen >
-      <template v-slot:activator="{ on, attrs }">
- 
-        <v-btn v-bind="attrs" v-on="on" icon>
-          <v-icon>mdi-plus-box</v-icon>
-        </v-btn>
-      </template>
       <v-card>
-        <v-btn @click="aver">
-      funciona
-    </v-btn>
         <v-card-title>
           <span class="headline">Nuevo anuncio</span>
         </v-card-title>
@@ -205,7 +195,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closeModal">
+          <v-btn color="blue darken-1" text @click="$emit('nuevoanunciooff')">
             Close
           </v-btn>
           <v-btn color="blue darken-1" text @click="guardarAnuncio">
@@ -213,7 +203,6 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
       <LoadingModal :dialog="guardando"/>
         <div class="text-center ma-2">
         <v-snackbar
@@ -232,7 +221,7 @@
           </template>
         </v-snackbar>
       </div>
-  </div>
+    </v-dialog>
 </template>
 
 <script>
@@ -244,12 +233,14 @@ moment.locale('es');
 var ref=storage.ref();
 export default {
   name: "nuevoanuncio",
+  props: {
+    dialog:Boolean
+    },
   components: {
     LoadingModal
     },
   data() {
     return {
-      dialog: false,
       snackbar:false,
       nuevoAnuncio:{
           descripcion:'',
@@ -357,9 +348,6 @@ export default {
       generarURL(img){
           return URL.createObjectURL(img);
       },
-      aver(){
-        this.agregoChange();
-      },
       rellenarURLs(){
         this.imgURLs=[];
         this.imagenes.forEach(img=>{
@@ -375,27 +363,24 @@ export default {
         this.dialog=false;
         this.$refs.form.reset();
       },
-      guardarAnuncio(){
+      async guardarAnuncio(){
           if (this.$refs.form.validate()) {//validamos que el fomulario este lleno
               this.guardando=true;
               this.nuevoAnuncio.creado=moment()._d;
-              db.collection('anuncios').add(this.nuevoAnuncio).then(res=>{
-                  this.imagenes.forEach(img=>{
+               var res=await db.collection('anuncios').add(this.nuevoAnuncio);
+               this.imagenes.forEach(async img=>{
                       const imgRef=ref.child('S_'+res.id+'/'+img.name);
-                      imgRef.put(img).then(res2=>{
-                          console.log('Archivo subido con exito');
-                          this.reset();
-                          this.agregoChange();
-                          this.snackbar=true;
-                      }).catch(err=>{
-                          console.log(err);
-                    });
+                      let res2=await imgRef.put(img);
+                      console.log('imagen subida con exito');
                   });
-              });
-          } 
-      }
+                  console.log('anuncio subido con exito');
+                  this.reset();
+                  this.agregoChange();
+                  this.snackbar=true;
+       }
+    }
   }
-};
+}
 </script>
 
 <style></style>

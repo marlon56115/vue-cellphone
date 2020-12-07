@@ -78,6 +78,7 @@ export default {
   },
   computed:{
     ...mapState(['agrego','marcasSelected','sistemasSelected','estadosSelected','precioSelected','marcas','sistemas','estados']),
+    
     AnunciosFiltrados(){
       var condicion = { marca: "", sistema: "",precio:"",estado:""};
       var arrayFiltrado = [];

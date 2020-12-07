@@ -12,13 +12,44 @@
         flat
       >
         <v-toolbar-title>Mi carrito</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
       </v-toolbar>
+      <v-divider
+            horizontal
+          ></v-divider>
     </template>
+      <template v-slot:item.titulo="{ item }">
+        <v-row>
+          <v-col cols="12" md="3">
+            <v-img
+            max-width="175"
+            max-height="100"
+            :src="item.imagenes[0]"
+            lazy-src="../assets/grey.jpg"
+            >
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular
+                  indeterminate
+                  color="grey "
+                ></v-progress-circular>
+              </v-row>
+            </template>
+            </v-img>
+          </v-col>
+          <v-col cols="12" md="9">
+            {{item.titulo}}
+            <v-divider
+            class="float-right"
+            vertical
+          ></v-divider>
+          </v-col>
+        </v-row>      
+        
+      </template>
     <template v-slot:item.cantidad="{ item }">
         <v-btn 
         icon 
@@ -51,7 +82,7 @@
       $ {{item.subtotal}}
     </template>
     <template v-slot:footer>
-      Total: ${{total}}
+      
     </template>
     <template v-slot:no-data>
       <v-btn
@@ -62,6 +93,14 @@
       </v-btn>
     </template>
   </v-data-table>
+  <v-card class="mt-5">
+    <v-card-title>
+      Resumen
+    </v-card-title>
+    <v-card-text>
+      Total: ${{total}}
+    </v-card-text>
+  </v-card>
   </div>
 </template>
 

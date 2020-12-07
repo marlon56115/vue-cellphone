@@ -88,23 +88,12 @@ export default {
     methods:{
         ...mapMutations(['actualizarFiltros']),
         updateLocalFilters(){
-        this.localMarca=[];
-        this.localSistema=[];
-        this.localEstados=[];
-        this.localPrecio={min:undefined,max:undefined};
-            this.marcasSelected.forEach(m=>{
-            this.localMarca.push(m);
-           });
-           this.sistemasSelected.forEach(m=>{
-            this.localSistema.push(m);
-           });
-           this.estadosSelected.forEach(m=>{
-            this.localEstados.push(m);
-           });
-           this.localPrecio.min=this.precioSelected.min;
-           this.localPrecio.max=this.precioSelected.max;
-          }
+        this.localMarca=this.marcasSelected;
+        this.localSistema=this.sistemasSelected;
+        this.localEstados=this.estadosSelected;
+        this.localPrecio=this.precioSelected;
     }
+  }
 }
 </script>
 

@@ -1,10 +1,13 @@
 <template>
   <div>
     <NuevoAnuncio @nuevoanunciooff="nuevoAnuncioOff" :dialog="nuevoAnuncio"/>
-      <v-app-bar app dark>
+      <v-app-bar app dark min-height="65">
       <v-app-bar-nav-icon @click="drawer = !drawer" v-if="$vuetify.breakpoint.smAndDown">
          </v-app-bar-nav-icon>
-        <router-link to="/">
+        <router-link to="/" class="brand white--text" >
+        <v-icon >
+          mdi-shopping
+        </v-icon>
            Cell Phone 
          </router-link>
          <v-spacer></v-spacer>
@@ -26,9 +29,9 @@
         :content="getTotalCarrito"
         color="error"
         overlap
-        class="mt-3"
+        class="mt-4"
       >
-      <v-btn icon to="/carrito" text>
+      <v-btn icon to="/carrito" text class="mt-n2 mr-n2">
       
         <v-icon >mdi-cart</v-icon>
       </v-btn>
@@ -99,5 +102,8 @@ export default {
 </script>
 
 <style>
-
+.brand {
+    text-decoration: none ;
+    font-size: 1.5rem !important;
+};
 </style>

@@ -41,7 +41,7 @@ export default new Vuex.Store({
         anuncio.subtotal=anuncio.precio;
         state.carrito.push(anuncio);
         state.carrito=state.carrito.slice();
-        console.log(state.carrito);
+        //console.log(state.carrito);
         //console.log(state.carrito);
       }else{
         state.carrito.forEach(an=>{
@@ -50,7 +50,7 @@ export default new Vuex.Store({
             an.cantidad=an.cantidad+1;
             an.subtotal=an.cantidad*an.precio;
             state.carrito=state.carrito.slice();
-            console.log(an);
+            //console.log(an);
           }
         });
         //state.carrito.find(an=>an.id===anuncio.id).cantidad+=1;
@@ -67,6 +67,7 @@ export default new Vuex.Store({
           if(an.cantidad>1){
             an.cantidad=an.cantidad-1;
             state.carrito=state.carrito.slice();
+            console.log(state.carrito);
           }else if(an.cantidad==1){
             //console.log('llego a 0');
             state.carrito.splice(i,1);
@@ -85,16 +86,16 @@ export default new Vuex.Store({
       state.carrito.forEach(an=>{
         total=total+an.cantidad;
       })
-      console.log(total);
+      //console.log(total);
       //state.carrito=state.carrito.slice();
       return total;
     },
       getTotal(state){
           var total=0;
           state.carrito.forEach(item=>{
-              total+=item.subtotal;
+              total+=item.cantidad*item.precio;
           });
-          state.carrito=state.carrito.slice();
+          
           return total;
       } ,
     getCarrito:function (state){

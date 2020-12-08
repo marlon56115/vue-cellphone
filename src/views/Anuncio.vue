@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-container fluid >
-      <v-row class="mx-md-16 px-md-10 grey lighten-4 rounded">
+    <v-container  >
+      <v-row class="mx-md-16 grey lighten-4 rounded">
         <v-col cols="12" sm="6" >
           <v-card :loading="loading">
             <v-card-text>
@@ -80,7 +80,7 @@
                 ></v-rating>
             </v-col>
             <v-col>
-             Publicado 
+             Publicado {{momentL(anuncioDetalle.creado)}}
             </v-col>
             </v-row>
                
@@ -170,7 +170,10 @@ export default {
       methods: {
         ...mapMutations(['addToCart']),
         momentL(s){
-         return moment(s,'X').fromNow();
+          if(s!=undefined){
+            return moment(s.seconds,'X').fromNow();
+          }
+          return '';
       },
       async traerAnuncio(){
         let res=await db.collection('anuncios').doc(this.$route.params.id).get();

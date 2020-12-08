@@ -1,5 +1,5 @@
 <template>
-  <div class="home grey lighten-4 rounded">
+  <v-container fluid class="grey lighten-4 ">
     <v-row>
       <v-col cols="12" sm="2" v-if="$vuetify.breakpoint.lgAndUp">
         <Filters/>
@@ -10,8 +10,7 @@
         :loading="loadingData"/>
       </v-col>
     </v-row>
-
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -34,7 +33,14 @@ export default {
     }
   },
   created (){
+    this.actualizarFiltros({
+      localMarca:[],
+      localSistema:[],
+      localEstados:[],
+      localPrecio:{min:undefined,max:undefined}
+    });
     this.traerAnuncios(); 
+    
   },
   
   methods:{

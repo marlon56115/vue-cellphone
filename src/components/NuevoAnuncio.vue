@@ -360,7 +360,7 @@ export default {
           this.closeModal();
       },
       closeModal(){
-        this.dialog=false;
+        this.$emit('nuevoanunciooff');
         this.$refs.form.reset();
       },
       async guardarAnuncio(){

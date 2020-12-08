@@ -13,7 +13,7 @@
       <template v-slot:header>
         <v-toolbar
           
-          class=" elevation-0 grey lighten-4 rounded "
+          class=" elevation-0 grey lighten-4 "
         >
           <v-text-field
             
@@ -296,7 +296,7 @@ moment.locale('es');
     methods: {
         ...mapMutations(['addToCart']),
         goToAnuncio(anuncio){
-            this.setAnuncioDetalle(anuncio);
+            //this.setAnuncioDetalle(anuncio);
             this.$router.push({ name: 'Anuncio', params: { id: anuncio.id} });
             //let routeData = this.$router.resolve({name: 'Anuncio'});
             //window.open(routeData.href, '_blank');

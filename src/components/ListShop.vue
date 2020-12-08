@@ -145,15 +145,25 @@ import {mapState} from 'vuex';
     },
 
     methods: {
-       async aumentarCantidad(item){
-             let i =await this.filtrado.find(a=>a.id===item.id);
-             i.cantidad+=1;
-             i.subtotal=i.precio*i.cantidad;
+        aumentarCantidad(item){
+             this.filtrado.forEach(i=>{
+               if(i.id===item.id){
+                 i.cantidad+=1;
+                i.subtotal=i.precio*i.cantidad;
+                console.log(i.cantidad);
+               }
+             });
+             this.filtrado=this.filtrado.slice();
         },
-        async disminuirCantidad(item){
-            let i =await this.filtrado.find(a=>a.id===item.id);
-             i.cantidad-=1;
-             i.subtotal=i.precio*i.cantidad;
+         disminuirCantidad(item){
+            this.filtrado.forEach(i=>{
+               if(i.id===item.id){
+                 i.cantidad-=1;
+                i.subtotal=i.precio*i.cantidad;
+                console.log(i.cantidad);
+               }
+             });
+             this.filtrado=this.filtrado.slice();
         },
         carritoFiltrado(){
            var carritoLocal=[];

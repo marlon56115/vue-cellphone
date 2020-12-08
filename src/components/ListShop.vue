@@ -2,7 +2,7 @@
 <div>
   <v-data-table
     :headers="headers"
-    :items="filtrado"
+    :items="carrito"
     sort-by="titulo"
     class="elevation-1"
     hide-default-footer
@@ -53,20 +53,27 @@
     <template v-slot:item.cantidad="{ item }">
         <v-btn 
         icon 
-        @click="disminuirCantidad(item)"
+        @click="quitToCart(item)"
         :disabled="item.cantidad==0"
         >
             <v-icon
             small
+            v-if="item.cantidad>1"
             >
             mdi-minus
+            </v-icon>
+            <v-icon
+            small
+            v-else
+            >
+            mdi-trash-can-outline
             </v-icon>
         </v-btn>
       
         {{item.cantidad}}
         <v-btn 
         icon
-        @click="aumentarCantidad(item)"
+        @click="addToCart(item)"
         >
         <v-icon
             small
@@ -98,14 +105,14 @@
       Resumen
     </v-card-title>
     <v-card-text>
-      Total: ${{total}}
+      Total: ${{getTotal}}
     </v-card-text>
   </v-card>
   </div>
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import {mapState,mapMutations,mapGetters} from 'vuex';
   export default {
     data() {
         return {
@@ -130,21 +137,23 @@ import {mapState} from 'vuex';
 
     computed: {
       ...mapState(['carrito']),
-      total(){
+      ...mapGetters(['getTotal']),
+     /*  total(){
           var total=0;
           this.filtrado.forEach(item=>{
               total+=item.subtotal;
           });
           return total;
-      }
+      } */
       
     },
 
     created () {
-        this.carritoFiltrado();
+       // this.carritoFiltrado();
     },
 
     methods: {
+      ...mapMutations(['addToCart','quitToCart']),
         aumentarCantidad(item){
              this.filtrado.forEach(i=>{
                if(i.id===item.id){

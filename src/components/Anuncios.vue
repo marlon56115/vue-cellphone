@@ -294,7 +294,7 @@ moment.locale('es');
       }
     },
     methods: {
-        ...mapMutations(['setAnuncioDetalle','addToCart']),
+        ...mapMutations(['addToCart']),
         goToAnuncio(anuncio){
             this.setAnuncioDetalle(anuncio);
             this.$router.push({ name: 'Anuncio', params: { id: anuncio.id} });

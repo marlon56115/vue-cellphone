@@ -23,7 +23,7 @@
           <v-icon right>mdi-plus-box</v-icon>
       </v-btn>
       <v-badge
-        :content="carrito.length"
+        :content="getTotalCarrito"
         color="error"
         overlap
         class="mt-3"
@@ -70,7 +70,7 @@
 
 <script>
 import NuevoAnuncio from './NuevoAnuncio'
-import {mapState} from 'vuex';
+import {mapState,mapGetters} from 'vuex';
 export default {
     name:'navbar',
     components:{
@@ -83,7 +83,8 @@ export default {
         }
     },
     computed: {
-      ...mapState(['carrito'])
+      ...mapState(['carrito']),
+      ...mapGetters(['getTotalCarrito']),
     },
     methods: {
       nuevoAnuncioOn(){

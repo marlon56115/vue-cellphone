@@ -275,12 +275,12 @@ moment.locale('es');
     data () {
       return {
         snackAgregoCart:false,
-        itemsPerPageArray: [10, 15, 20],
+        itemsPerPageArray: [4, 8, 12],
         search: '',
         filter: {},
         sortDesc: false,
         page: 1,
-        itemsPerPage: 10,
+        itemsPerPage: 8,
         sortBy: 'marca',
         keys: [
           'Marca',

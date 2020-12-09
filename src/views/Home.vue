@@ -5,6 +5,7 @@
         <Filters/>
       </v-col>
       <v-col cols="12" lg="10" >
+        <DialogFilters v-if="$vuetify.breakpoint.mdAndDown"/>
         <Anuncios 
         :items="AnunciosFiltrados" 
         :loading="loadingData"/>
@@ -134,6 +135,7 @@ export default {
         );
       });
        this.loadingData=false;
+       this.$vuetify.goTo(0);
       return arrayFiltrado;
     }
   },

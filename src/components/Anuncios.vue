@@ -61,7 +61,7 @@
               </v-btn>
             </v-btn-toggle>        
           </template>
-          <DialogFilters v-if="$vuetify.breakpoint.mdAndDown"/>
+          
           <span class="grey--text ml-2" v-if="$vuetify.breakpoint.mdAndUp">Mostrar</span>
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
@@ -275,12 +275,12 @@ moment.locale('es');
     data () {
       return {
         snackAgregoCart:false,
-        itemsPerPageArray: [4, 8, 12],
+        itemsPerPageArray: [10, 15, 20],
         search: '',
         filter: {},
         sortDesc: false,
         page: 1,
-        itemsPerPage: 4,
+        itemsPerPage: 10,
         sortBy: 'marca',
         keys: [
           'Marca',
@@ -318,12 +318,6 @@ moment.locale('es');
             //let routeData = this.$router.resolve({name: 'Anuncio'});
             //window.open(routeData.href, '_blank');
         },
-      nextPage () {
-        if (this.page + 1 <= this.numberOfPages) this.page += 1
-      },
-      formerPage () {
-        if (this.page - 1 >= 1) this.page -= 1
-      },
       updateItemsPerPage (number) {
         this.itemsPerPage = number
       },
@@ -338,6 +332,11 @@ moment.locale('es');
         this.snackAgregoCart=true;
       }
     },
+    watch:{ //para que vaya arriba
+      page:function( val){
+        this.$vuetify.goTo(0)
+      }
+    }
   }
 </script>
 <style>

@@ -4,7 +4,7 @@
           <v-col cols="12" class="pl-5">
             <p class="mt-5 mb-n1">Marcas</p>
             <v-checkbox v-for="(item,index) in marcas"
-            :key="index"
+            :key="item"
             hide-details
             class="my-n1"
             v-model="localMarca"
@@ -15,7 +15,7 @@
           ></v-checkbox>
           <p class="mt-5 mb-n1">Sistemas</p>
           <v-checkbox v-for="(item,index) in sistemas"
-            :key="index+5"
+            :key="item"
             class="my-n1"
             hide-details
             v-model="localSistema"
@@ -26,7 +26,7 @@
           ></v-checkbox>
           <p class="mt-5 mb-n1">Estados</p>
           <v-checkbox v-for="(item,index) in estados"
-            :key="index+20"
+            :key="item"
             class="my-n1"
             hide-details
             v-model="localEstados"

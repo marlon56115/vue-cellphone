@@ -201,6 +201,7 @@ export default {
         this.setAnuncioDetalle(anuncio);
         this.anuncioDetalle=anuncio;
         this.loading=false;
+        this.$vuetify.goTo(0);
       },
       async insertarImagenes(anuncio){
            const list=await ref.child('S_'+anuncio.id+'/').listAll();

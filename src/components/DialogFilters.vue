@@ -6,18 +6,33 @@
     >
       <template v-slot:activator="{ on, attrs }">
           <v-btn
-            class="ma-2 white elevation-0"
+            class="mb-8 red elevation-0 white--text"
             v-bind="attrs"
             v-on="on"
+            fab  
             small
+            absolute
+            fixed
+            left
+            bottom
             >
             <v-icon>mdi-filter</v-icon>
         </v-btn>
       </template>
         <v-card>
-            <v-card-title class="headline grey lighten-2">
-          Filtros
-        </v-card-title>
+            <v-toolbar
+            dark
+            color="primary"
+          >
+            <v-btn
+              icon
+              dark
+              @click="dialog = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Filtros de busqueda</v-toolbar-title>
+          </v-toolbar>
          <v-card-text>
              <Filters/>
         </v-card-text>
@@ -26,13 +41,18 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="dialog = false"
-          >
-            Cerrar
-          </v-btn>
+           <v-btn 
+             small
+             text
+             color="error"
+             @click="dialog = false"
+             >
+             
+              <v-icon left>
+                mdi-close
+                </v-icon>
+                  Cerrar          
+            </v-btn>
         </v-card-actions>
         </v-card>
         

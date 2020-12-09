@@ -12,6 +12,9 @@ export default {
     name:'carrito',
     components:{
       listShop
+    },
+    created(){
+      this.$vuetify.goTo(0);
     }
 }
 </script>

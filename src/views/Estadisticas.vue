@@ -61,7 +61,9 @@ export default {
   data: () => ({
     
   }),
-
+  created() {
+    this.$vuetify.goTo(0);
+  }
  
 };
 </script>

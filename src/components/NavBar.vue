@@ -39,6 +39,18 @@
       </v-toolbar-items>
 
       <v-navigation-drawer app v-model="drawer" absolute temporary dark >
+         <template v-slot:prepend>
+        <v-list-item two-line>
+          <v-list-item-avatar>
+            <img src="../assets/profile.png">
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title>Usuario</v-list-item-title>
+            <v-list-item-subtitle>Iniciar Sesion</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
       <v-list dense>
         <v-list-item link to="/">
           <v-list-item-icon>

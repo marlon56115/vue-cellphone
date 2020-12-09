@@ -9,7 +9,7 @@
             <v-btn
               icon
               dark
-              @click="$emit('nuevoanunciooff')"
+              @click="closeModal"
             >
               <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -37,6 +37,8 @@
                       <v-row no-gutters>
                           <v-col cols="12" >
                             <v-select
+                                menu-props="auto"
+                                single-line   
                                 v-model="nuevoAnuncio.estado"
                                 :items="estados"
                                 label="Estado"
@@ -48,6 +50,8 @@
                           </v-col>
                           <v-col cols="12" >
                             <v-select
+                                menu-props="auto"
+                                single-line
                                 v-model="nuevoAnuncio.marca"
                                 :items="marcas"
                                 label="Marca"
@@ -59,6 +63,8 @@
                           </v-col>
                           <v-col cols="12" class="py-0">
                             <v-select
+                                menu-props="auto"
+                                single-line
                                 v-model="nuevoAnuncio.modelo"
                                 :disabled="nuevoAnuncio.marca?false:true"
                                 :items="modelosPorMarca"
@@ -71,6 +77,8 @@
                           </v-col>
                           <v-col cols="12" class="py-0">
                               <v-select
+                                menu-props="auto"
+                                single-line
                                 v-model="nuevoAnuncio.sistema"
                                 :items="sistemas"
                                 label="Sistema operativo"
@@ -166,7 +174,7 @@
                                 name="input-7-4"
                                 label="Descripcion"
                                 v-model="nuevoAnuncio.descripcion"
-                                counter="100"
+                                counter="500"
                               ></v-textarea>
                           </v-col>
                           <v-col cols="12">
@@ -375,30 +383,6 @@ export default {
       },
       imagenes:[],
       imagen:[],
-      marcas:['Samsung','Apple','Huawei','LG'],
-      modelos:[{
-          marca:'Samsung',
-          modelo:'Galaxy S III'
-      },
-      {
-          marca:'Samsung',
-          modelo:'Galaxy Note 20 Ultra'
-      },
-      {
-          marca:'Huawei',
-          modelo:'P40 Pro'
-      },
-      {
-          marca:'Apple',
-          modelo:'Iphone 11 pro max'
-      },
-      {
-          marca:'LG',
-          modelo:'Stylus III'
-      }
-      ],
-      sistemas:['Android','Ios','Windows Phone'],
-      estados:['Nuevo','Usado','Semi-usado','Dañado'],
       imgURLs:[],
       guardando:false,
       valid:false,
@@ -416,7 +400,7 @@ export default {
       ],
       tituloReglas:[
         v =>!!v || 'Ingrese un titulo!',
-        v => !!v  ? v.length<50 || 'Titulo demasiado largo!':'', //si cumple la condicion no muestra la alerta
+        v => !!v  ? v.length<100 || 'Titulo demasiado largo!':'', //si cumple la condicion no muestra la alerta
       ],
       vendedorReglas:[
         v =>!!v || 'Ingrese un nombre!',
@@ -428,7 +412,7 @@ export default {
       ],
       descripcionReglas:[
         v =>!!v || 'Ingrese una descripciòn!',
-        v => !!v  ? v.length<100 || 'Descripcion demasido larga!':'',
+        v => !!v  ? v.length<500 || 'Descripcion demasido larga!':'',
       ],
       precioReglas:[
         v =>!!v || 'Ingrese el precio!',
@@ -445,8 +429,9 @@ export default {
     };
   },
   computed:{
-    ...mapState(['agrego']),
+    ...mapState(['agrego','marcas','modelos','estados','sistemas']),
       modelosPorMarca(){
+        console.log(this.modelos);
           const modelosMarca=[];
           this.modelos.forEach(modelo=>{
               if(modelo.marca===this.nuevoAnuncio.marca){
@@ -500,7 +485,7 @@ export default {
           if (this.$refs.form.validate() && this.conditions && this.imagenes.length>0) {//validamos que el fomulario este lleno
           console.log(this.imagenes);
           console.log('paso la prueba para guardar!');
-              /* this.guardando=true;
+              this.guardando=true;
               this.nuevoAnuncio.creado=moment()._d;
                var res=await db.collection('anuncios').add(this.nuevoAnuncio);
                this.imagenes.forEach(async img=>{
@@ -511,7 +496,7 @@ export default {
                   console.log('anuncio subido con exito');
                   this.closeModal();
                   this.agregoChange();
-                  this.snackbarAgrego=true; */
+                  this.snackbarAgrego=true; 
        }else{
          this.snackbarError=true;
        }

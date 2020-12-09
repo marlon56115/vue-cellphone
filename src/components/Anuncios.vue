@@ -215,7 +215,7 @@
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn 
-              @click="addToCart(item)"
+              @click="agregarAlCarrito(item)"
               class="mr-4 "
               
                fab
@@ -241,6 +241,22 @@
         </div>
       </template>
     </v-data-iterator>
+    <v-snackbar
+          v-model="snackAgregoCart"
+          timeout="2000"
+        >
+           Articulo añadido al carrito! 
+          <template v-slot:action="{ attrs }">
+            <v-btn
+              color="pink"
+              text
+              v-bind="attrs"
+              @click="snackAgregoCart=false"
+            >
+              Cerrar
+            </v-btn>
+          </template>
+      </v-snackbar>
   </v-container>
 </template>
 <script>
@@ -258,6 +274,7 @@ moment.locale('es');
       },
     data () {
       return {
+        snackAgregoCart:false,
         itemsPerPageArray: [4, 8, 12],
         search: '',
         filter: {},
@@ -315,6 +332,10 @@ moment.locale('es');
       },
       actualizarFiltros(nuevo){
         this.$emit('cambio',nuevo);
+      },
+      agregarAlCarrito(item){
+        this.addToCart(item);
+        this.snackAgregoCart=true;
       }
     },
   }

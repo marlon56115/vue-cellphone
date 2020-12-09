@@ -87,7 +87,7 @@
             </v-card-text>
             <v-card-actions class="grey lighten-3">
               <v-btn 
-              @click="addToCart(anuncioDetalle)"
+              @click="agregarAlCarrito(anuncioDetalle)"
                dark
                block
               color="primary elevation-0">
@@ -146,6 +146,22 @@
         </v-col>
       </v-row>
     </v-container>
+     <v-snackbar
+          v-model="snackAgregoCart"
+          timeout="2000"
+        >
+           Articulo añadido al carrito! 
+          <template v-slot:action="{ attrs }">
+            <v-btn
+              color="pink"
+              text
+              v-bind="attrs"
+              @click="snackAgregoCart=false"
+            >
+              Cerrar
+            </v-btn>
+          </template>
+      </v-snackbar>
   </div>
 </template>
 
@@ -159,6 +175,7 @@ export default {
     name:'anuncio',
     data() {
       return{
+        snackAgregoCart:false,
         anuncioDetalle:{},
         especificaciones:[],
         loading:true
@@ -193,7 +210,10 @@ export default {
                       anuncio.imagenes.push(url);
             }); 
         },
-
+      agregarAlCarrito(item){
+        this.addToCart(item);
+        this.snackAgregoCart=true;
+      },
       setAnuncioDetalle(anuncio){
        this.especificaciones=[{
         action: 'mdi-alert-decagram',

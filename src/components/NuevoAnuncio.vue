@@ -1,12 +1,37 @@
 <template>
     <v-dialog v-model="dialog" persistent fullscreen >
+      
       <v-card>
-        <v-card-title>
-          <span class="headline">Nuevo anuncio</span>
-        </v-card-title>
+          <v-toolbar
+            dark
+            color="primary"
+          >
+            <v-btn
+              icon
+              dark
+              @click="$emit('nuevoanunciooff')"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Nuevo Anuncio</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn
+                dark
+                text
+                small
+                @click="cleanForm"
+              >
+              <v-icon left>
+                   mdi-reload
+               </v-icon>
+                Reset
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
         <v-card-text>
-          <v-form v-model="valid" lazy-validation ref="form">
               <v-container>
+                <v-form v-model="valid" lazy-validation ref="form">
                 <v-row>
                   <v-col cols="12" sm="6" md="6">
                       <v-row no-gutters>
@@ -158,55 +183,126 @@
                           </v-col>
                       </v-row>
                   </v-col>
-                  <v-col cols="12" sm="6" md="6"> 
-                      <v-file-input
-                        required
-                        :rules="imagenesReglas"
-                        v-model="imagenes"
-                        multiple
-                        accept="image/png, image/jpeg, image/bmp"
-                        placeholder="Selecciona imagenes"
-                        prepend-icon="mdi-camera"
-                        label="Imagenes"
-                        @change="rellenarURLs"
-                      >
-                        <template v-slot:selection="{ file }">
-                            <v-avatar>
-                                <img :src="generarURL(file)" :alt="file.name">
-                            </v-avatar>
-                        </template>
-                    </v-file-input>
+                </v-row>
+                 </v-form>
+                <v-row>
+                  <v-col cols="12" sm="6" md="6">
+                     <v-card
+                      elevation="0"
+                      
+                    >
+                    <v-card-title>
+                      Agrega imagenes
+                    </v-card-title>
+                       <v-carousel height="200" cycle dark v-if="preview && imgURLs.length>0">
+                        <v-carousel-item
+                          v-for="(item,i) in imgURLs"
+                          :key="i"
+                          :src="item"
+                          reverse-transition="fade-transition"
+                          transition="fade-transition"
+                        >
+                        <v-btn  color="red"
+                        @click="eliminarImg(i)">
+                          <v-icon>
+                            mdi-delete
+                          </v-icon>
+                        </v-btn>
+                        </v-carousel-item>
+                      </v-carousel>
+                      <v-list two-line>
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-form lazy-validation ref="imgFileForm">
+                              <v-file-input
+                                :disabled="imagenes.length>4"
+                                v-model="imagen"
+                                required
+                                :rules="imagenReglas"
+                                accept="image/png, image/jpeg, image/bmp, image/jpg"
+                                placeholder="Seleccionar"
+                                prepend-icon="mdi-camera"
+                                label="Imagen"
+                                @change="agregarImagen"
+                              >
+                            </v-file-input>
+                          </v-form>
+                          </v-list-item-content>
+                          <v-list-item-action>
+                            <v-switch
+                              dense
+                              v-model="preview"
+                              label="Vista previa"
+                              inset
+                            ></v-switch>
+                          </v-list-item-action>
+                        </v-list-item>
+                      </v-list>
+                    </v-card>
                   </v-col>
-                  <v-col cols="12" sm="6" md="6"> 
-                    <v-carousel height="200" cycle dark>
-                    <v-carousel-item
-                      v-for="(item,i) in imgURLs"
-                      :key="i"
-                      :src="item"
-                      reverse-transition="fade-transition"
-                      transition="fade-transition"
-                    ></v-carousel-item>
-                  </v-carousel>
+                  <v-col cols="12" sm="6" md="6" >
+                         <v-card class="elevation-0">
+                          <v-card-title >
+                            Terminos y condiciones
+                          </v-card-title>
+
+                          <v-card-text>
+                            No me hago cargo de lo que se publique en esta app :)
+                            
+                            <v-switch
+                              class="float-right"
+                              dense
+                              v-model="conditions"
+                              label="Acepto"
+                              inset
+                            ></v-switch>
+                          </v-card-text>
+                        </v-card>
                   </v-col>
                 </v-row>
               </v-container>
-              <small>*campos requeridos</small>
-          </v-form>
+          
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="$emit('nuevoanunciooff')">
-            Close
-          </v-btn>
-          <v-btn color="blue darken-1" text @click="guardarAnuncio">
-            Save
-          </v-btn>
+        <v-divider></v-divider>
+        <v-card-actions class="grey lighten-4"  >
+          <v-row >
+            <v-col  class=" text-center" >
+              <v-btn 
+            color="success" 
+            small
+            text
+           
+            @click="guardarAnuncio"
+            >
+             <v-icon left>
+                  mdi-upload
+            </v-icon>
+              Publicar
+             </v-btn>
+             <v-btn 
+             small
+             text
+             color="error"
+             @click="closeModal"
+             >
+             
+              <v-icon left>
+                mdi-cancel
+                </v-icon>
+                  Cancelar          
+              </v-btn>
+    
+            </v-col>
+          </v-row>
+            
         </v-card-actions>
+       
       </v-card>
+     
       <LoadingModal :dialog="guardando"/>
         <div class="text-center ma-2">
         <v-snackbar
-          v-model="snackbar"
+          v-model="snackbarAgrego"
         >
            Anuncio agregado con exito! 
           <template v-slot:action="{ attrs }">
@@ -214,7 +310,23 @@
               color="pink"
               text
               v-bind="attrs"
-              @click="snackbar=false"
+              @click="snackbarAgrego=false"
+            >
+              Cerrar
+            </v-btn>
+          </template>
+        </v-snackbar>
+        <v-snackbar
+          v-model="snackbarError"
+          timeout="2000"
+        >
+           Faltan campos por rellenar! 
+          <template v-slot:action="{ attrs }">
+            <v-btn
+              color="pink"
+              text
+              v-bind="attrs"
+              @click="snackbarError=false"
             >
               Cerrar
             </v-btn>
@@ -231,6 +343,7 @@ import {mapState,mapMutations} from 'vuex';
 import moment from 'moment';
 moment.locale('es');
 var ref=storage.ref();
+
 export default {
   name: "nuevoanuncio",
   props: {
@@ -241,7 +354,10 @@ export default {
     },
   data() {
     return {
-      snackbar:false,
+      snackbarAgrego:false,
+      snackbarError:false,
+      preview:true,
+      conditions:false,
       nuevoAnuncio:{
           descripcion:'',
           estado:'',
@@ -258,6 +374,7 @@ export default {
           creado:''
       },
       imagenes:[],
+      imagen:[],
       marcas:['Samsung','Apple','Huawei','LG'],
       modelos:[{
           marca:'Samsung',
@@ -317,9 +434,8 @@ export default {
         v =>!!v || 'Ingrese el precio!',
         v => !!v  ? v>0 || 'Precio invalido!':''
       ],
-      imagenesReglas:[
-        v =>v.length!==0 || 'Ingrese minimo una imagen',
-        v =>v.length<=5 || 'Maximo 5 imagenes!'
+      imagenReglas:[
+        img => !img || img.size < 5000000 || 'Tamaño maximo de 5 mb!',
       ],
       estadoReglas:[v => !!v || 'Seleccione el estado!'],
       marcaReglas:[v => !!v || 'Seleccione la marca!'],
@@ -348,24 +464,43 @@ export default {
       generarURL(img){
           return URL.createObjectURL(img);
       },
-      rellenarURLs(){
-        this.imgURLs=[];
-        this.imagenes.forEach(img=>{
-          this.imgURLs.push(this.generarURL(img));
-        });
+      agregarImagen(img){
+        if(img!=undefined){ //para evitar erroers cuando se resetea el imgFileForm
+          if(img.size<5000000){ //evalua que la imagen no pase de 5 mb
+            console.log('paso');
+            this.imagenes.push(img);
+            this.imgURLs.push(this.generarURL(img));
+            this.$refs.imgFileForm.reset(); //reseteo form de file de imagen
+          }else{
+            console.log('no paso');
+            this.imagen=[]; //reseteo v-model de file de imagen para que no quede seleccionada
+            //this.imagen.slice();
+          } 
+        }
       },
-      reset(){
-          this.imagenes=[];
-          this.guardando=false;
-          this.closeModal();
+      eliminarImg(i){
+        this.imagenes.splice(i,1);
+        this.imgURLs.splice(i,1);
+        //console.log(i);
       },
-      closeModal(){
-        this.$emit('nuevoanunciooff');
+      cleanForm(){ //para limpiar el formulario y las imagenes
         this.$refs.form.reset();
+        this.$refs.imgFileForm.reset();
+        this.imagenes=[];
+        this.imgURLs=[];
+        this.imagen=[];
+        this.conditions=false;
+        this.guardando=false;
+      },
+      closeModal(){ //cuando de en el boton de cerrar modal
+        this.$emit('nuevoanunciooff');
+        this.cleanForm();
       },
       async guardarAnuncio(){
-          if (this.$refs.form.validate()) {//validamos que el fomulario este lleno
-              this.guardando=true;
+          if (this.$refs.form.validate() && this.conditions && this.imagenes.length>0) {//validamos que el fomulario este lleno
+          console.log(this.imagenes);
+          console.log('paso la prueba para guardar!');
+              /* this.guardando=true;
               this.nuevoAnuncio.creado=moment()._d;
                var res=await db.collection('anuncios').add(this.nuevoAnuncio);
                this.imagenes.forEach(async img=>{
@@ -374,9 +509,11 @@ export default {
                       console.log('imagen subida con exito');
                   });
                   console.log('anuncio subido con exito');
-                  this.reset();
+                  this.closeModal();
                   this.agregoChange();
-                  this.snackbar=true;
+                  this.snackbarAgrego=true; */
+       }else{
+         this.snackbarError=true;
        }
     }
   }

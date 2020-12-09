@@ -419,7 +419,7 @@ export default {
         v => !!v  ? v>0 || 'Precio invalido!':''
       ],
       imagenReglas:[
-        img => !img || img.size < 5000000 || 'Tamaño maximo de 5 mb!',
+        img => !img || img.size < 10000000 || 'Tamaño maximo de 5 mb!',
       ],
       estadoReglas:[v => !!v || 'Seleccione el estado!'],
       marcaReglas:[v => !!v || 'Seleccione la marca!'],
@@ -451,7 +451,7 @@ export default {
       },
       agregarImagen(img){
         if(img!=undefined){ //para evitar erroers cuando se resetea el imgFileForm
-          if(img.size<5000000){ //evalua que la imagen no pase de 5 mb
+          if(img.size<10000000){ //evalua que la imagen no pase de 5 mb
             console.log('paso');
             this.imagenes.push(img);
             this.imgURLs.push(this.generarURL(img));

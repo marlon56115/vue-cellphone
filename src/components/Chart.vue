@@ -15,7 +15,7 @@ export default {
       {
         label: "Cantidad",
         backgroundColor: "#f87979",
-        data: [7, 4, 6],
+        data: [],
       },
     ];
     try {
@@ -70,6 +70,5 @@ export default {
 
     this.renderChart(data,options);
   },
-  computed: {},
 };
 </script>

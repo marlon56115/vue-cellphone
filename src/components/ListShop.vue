@@ -1,219 +1,121 @@
 <template>
-<div>
-  <v-data-table
-    :headers="headers"
-    :items="carrito"
-    sort-by="titulo"
-    class="elevation-1"
-    hide-default-footer
-  >
-    <template v-slot:top>
-      <v-toolbar
-        flat
-      >
-        <v-toolbar-title>Mi carrito</v-toolbar-title>
-      </v-toolbar>
-      <v-divider
-            horizontal
-          ></v-divider>
-    </template>
+  <div>
+    <!--aqui se muestran los anuncios-->
+    <v-data-table
+      :headers="headers"
+      :items="carrito"
+      sort-by="titulo"
+      class="elevation-1"
+      hide-default-footer
+    >
+    <!--header de la tabla-->
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>Mi carrito</v-toolbar-title>
+        </v-toolbar>
+        <v-divider horizontal></v-divider>
+      </template>
+      <!--Modificacion donde se muestra el titulo-->
       <template v-slot:item.titulo="{ item }">
         <v-row>
           <v-col cols="12" md="3">
             <v-img
-            max-width="175"
-            max-height="100"
-            :src="item.imagenes[0]"
-            lazy-src="../assets/grey.jpg"
+              max-width="175"
+              max-height="100"
+              :src="item.imagenes[0]"
+              lazy-src="../assets/grey.jpg"
             >
-            <template v-slot:placeholder>
-              <v-row
-                class="fill-height ma-0"
-                align="center"
-                justify="center"
-              >
-                <v-progress-circular
-                  indeterminate
-                  color="grey "
-                ></v-progress-circular>
-              </v-row>
-            </template>
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey "
+                  ></v-progress-circular>
+                </v-row>
+              </template>
             </v-img>
           </v-col>
           <v-col cols="12" md="9">
-            {{item.titulo}}
-            <v-divider
-            class="float-right"
-            vertical
-          ></v-divider>
+            {{ item.titulo }}
+            <v-divider class="float-right" vertical></v-divider>
           </v-col>
-        </v-row>      
-        
+        </v-row>
       </template>
-    <template v-slot:item.cantidad="{ item }">
-        <v-btn 
-        icon 
-        @click="quitToCart(item)"
-        :disabled="item.cantidad==0"
-        >
-            <v-icon
-            small
-            v-if="item.cantidad>1"
-            >
+      <!--Modificacion donde se muestra la cantidad-->
+      <template v-slot:item.cantidad="{ item }">
+        <v-btn icon @click="quitToCart(item)" :disabled="item.cantidad == 0">
+          <v-icon small v-if="item.cantidad > 1">
             mdi-minus
-            </v-icon>
-            <v-icon
-            small
-            v-else
-            >
+          </v-icon>
+          <v-icon small v-else>
             mdi-trash-can-outline
-            </v-icon>
+          </v-icon>
         </v-btn>
-      
-        {{item.cantidad}}
-        <v-btn 
-        icon
-        @click="addToCart(item)"
-        >
-        <v-icon
-            small
-        >
+
+        {{ item.cantidad }}
+        <v-btn icon @click="addToCart(item)">
+          <v-icon small>
             mdi-plus
-        </v-icon>
-       </v-btn>
-    </template>
-    <template v-slot:item.precio="{item}">
-      $ {{item.precio}}
-    </template>
-    <template v-slot:item.subtotal="{item}">
-      $ {{item.subtotal}}
-    </template>
-    <template v-slot:footer>
-      
-    </template>
-    <template v-slot:no-data>
-      <v-btn
-        color="primary"
-        to="/"
-      >
-        Empieza a comprar!
-      </v-btn>
-    </template>
-  </v-data-table>
-  <v-card class="mt-5">
-    <v-card-title>
-      Resumen
-    </v-card-title>
-    <v-card-text>
-      Total: ${{getTotal}}
-    </v-card-text>
-  </v-card>
+          </v-icon>
+        </v-btn>
+      </template>
+      <!--Modificacion donde se muestra el precio-->
+      <template v-slot:item.precio="{ item }"> $ {{ item.precio }} </template>
+      <!--Modificacion donde se muestra el subtotal-->
+      <template v-slot:item.subtotal="{ item }">
+        $ {{ item.subtotal }}
+      </template>
+      <!--Para eliminar el footer-->
+      <template v-slot:footer> </template>
+      <!--Cuando no hayan articulos para redireccionar-->
+      <template v-slot:no-data>
+        <v-btn color="primary" to="/">
+          Empieza a comprar!
+        </v-btn>
+      </template>
+    </v-data-table>
+    <!--Resumen de compras-->
+    <v-card class="mt-5">
+      <v-card-title>
+        Resumen
+      </v-card-title>
+      <v-card-text> Total: ${{ getTotal }} </v-card-text>
+    </v-card>
   </div>
 </template>
 
 <script>
-import {mapState,mapMutations,mapGetters} from 'vuex';
-  export default {
-    data() {
-        return {
-      filtrado:[],
+import { mapState, mapMutations, mapGetters } from "vuex";
+
+export default {
+  data() {
+    return {
+      filtrado: [],
       dialogDelete: false,
       headers: [
         {
-          text: 'Producto',
-          align: 'start',
+          text: "Producto",
+          align: "start",
           sortable: false,
-          value: 'titulo',
+          value: "titulo",
         },
-        { text: 'Precio', value: 'precio' },
-        { text: 'Cantidad', value: 'cantidad' },
-        { text: 'Subtotal', value: 'subtotal' },
+        { text: "Precio", value: "precio" },
+        { text: "Cantidad", value: "cantidad" },
+        { text: "Subtotal", value: "subtotal" },
       ],
-      
-    }},
-    created() {
+    };
+  },
+  created() {},
 
-    },
+  computed: {
+    ...mapState(["carrito"]),
+    ...mapGetters(["getTotal"]),
+  },
 
-    computed: {
-      ...mapState(['carrito']),
-      ...mapGetters(['getTotal']),
-     /*  total(){
-          var total=0;
-          this.filtrado.forEach(item=>{
-              total+=item.subtotal;
-          });
-          return total;
-      } */
-      
-    },
-
-    created () {
-       // this.carritoFiltrado();
-    },
-
-    methods: {
-      ...mapMutations(['addToCart','quitToCart']),
-        aumentarCantidad(item){
-             this.filtrado.forEach(i=>{
-               if(i.id===item.id){
-                 i.cantidad+=1;
-                i.subtotal=i.precio*i.cantidad;
-                console.log(i.cantidad);
-               }
-             });
-             this.filtrado=this.filtrado.slice();
-        },
-         disminuirCantidad(item){
-            this.filtrado.forEach(i=>{
-               if(i.id===item.id){
-                 i.cantidad-=1;
-                i.subtotal=i.precio*i.cantidad;
-                console.log(i.cantidad);
-               }
-             });
-             this.filtrado=this.filtrado.slice();
-        },
-        carritoFiltrado(){
-           var carritoLocal=[];
-            this.carrito.forEach(anuncio=>{
-                carritoLocal.push(anuncio);
-            });
-
-            carritoLocal.forEach(anuncio=>{
-                anuncio.cantidad=undefined;
-                anuncio.subtotal=undefined;
-            });
-
-            carritoLocal.forEach(anuncio=>{
-                let nuevoArray=[];
-                nuevoArray=carritoLocal.filter(an=>an.id==anuncio.id);
-                anuncio.cantidad=nuevoArray.length;
-                anuncio.subtotal=anuncio.cantidad*anuncio.precio;
-            });
-            
-            var filtrado=[];
-            carritoLocal.forEach(anuncio=>{
-                let nuevoArray=[];
-                nuevoArray=carritoLocal.filter(an=>an.id==anuncio.id);
-                if(nuevoArray.length>0){
-                    if(!filtrado.find(a=>a.id===nuevoArray[0].id)){
-                        filtrado.push(nuevoArray[0]);
-                }
-                }
-            });
-            this.filtrado=filtrado;
-            //return this.filtrado;
-      },
-      
-      deleteItemConfirm () {
-        this.desserts.splice(this.editedIndex, 1)
-        this.closeDelete()
-      },
-    },
-  }
+  methods: {
+    ...mapMutations(["addToCart", "quitToCart"]),
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

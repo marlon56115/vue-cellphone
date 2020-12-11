@@ -3,6 +3,7 @@
     <v-container  >
       <v-row class="mx-md-16 grey lighten-4 rounded">
         <v-col cols="12" sm="6" >
+          <!--Card de carousel-->
           <v-card :loading="loading">
             <v-card-text>
               <v-carousel
@@ -18,9 +19,9 @@
             </v-carousel>
             </v-card-text>
           </v-card>
-          
         </v-col>
         <v-col cols="12" sm="6" align-self="center">
+           <!--card de detalle de anuncio-->
           <v-card
             class="mx-auto"
             :loading="loading"
@@ -95,12 +96,13 @@
                 Añadir al carrito
               </v-btn>
             </v-card-actions>
-          </v-card :loading="loading">
+          </v-card >
         </v-col>
         <v-col cols="12" >
           <p class="text-center text-h5">Especificaciones tecnicas</p>
         </v-col>
         <v-col cols="12" sm="6">
+           <!--card de especs-->
           <v-card :loading="loading">
             <v-card-text>
               <v-list>
@@ -129,9 +131,9 @@
           </v-list>
             </v-card-text>
           </v-card>
-           
         </v-col>
         <v-col cols="12" sm="6">
+           <!--card de descripcion-->
           <v-card :loading="loading">
             <v-card-title>
               Descripcion
@@ -142,10 +144,10 @@
             </div>
             </v-card-text>
           </v-card>
-            
         </v-col>
       </v-row>
     </v-container>
+     <!--snackbar de agrego al carrito-->
      <v-snackbar
           v-model="snackAgregoCart"
           timeout="2000"
@@ -171,6 +173,7 @@ import {storage,db} from '../database/firebase';
 var ref=storage.ref();
 import moment from 'moment';
 moment.locale('es');
+
 export default {
     name:'anuncio',
     data() {
@@ -182,16 +185,19 @@ export default {
       }
     },
     created() {
+      //cuando se crea trae al anuncio
       this.traerAnuncio();
     },
       methods: {
         ...mapMutations(['addToCart']),
+        /**devuelve la fecha desde cuando se creo */
         momentL(s){
           if(s!=undefined){
             return moment(s.seconds,'X').fromNow();
           }
           return '';
       },
+      /**metodo para traer el anuncio detalle */
       async traerAnuncio(){
         let res=await db.collection('anuncios').doc(this.$route.params.id).get();
         let anuncio=await res.data();
@@ -203,18 +209,20 @@ export default {
         this.loading=false;
         this.$vuetify.goTo(0);
       },
+      /**metodo para insertar las imagenes a un anuncio */
       async insertarImagenes(anuncio){
            const list=await ref.child('S_'+anuncio.id+'/').listAll();
-           console.log(list);
             list.items.forEach(async imgRef=>{ //obtenemos el id de cada anuncio para obtener le referencia de  la carpeta de sus fotos
                  const url=await imgRef.getDownloadURL();
                       anuncio.imagenes.push(url);
             }); 
         },
+        /**metodo para añadir al carrito */
       agregarAlCarrito(item){
         this.addToCart(item);
         this.snackAgregoCart=true;
       },
+      /**metodo para rellenar las specs del anuncio */
       setAnuncioDetalle(anuncio){
        this.especificaciones=[{
         action: 'mdi-alert-decagram',
@@ -253,7 +261,6 @@ export default {
         title: 'Memoria de almacenamiento',
       }
     ];
-       
     }
   }
 }

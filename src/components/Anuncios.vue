@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+    <!--data iterator de anuncios-->
     <v-data-iterator
       loading="true"
       :items="items"
@@ -10,13 +11,10 @@
       :sort-desc="sortDesc"
       hide-default-footer
     >
+      <!-- Header con filtros-->
       <template v-slot:header>
-        <v-toolbar
-          
-          class=" elevation-0 grey lighten-4 "
-        >
+        <v-toolbar class=" elevation-0 grey lighten-4 ">
           <v-text-field
-            
             dense
             v-model="search"
             clearable
@@ -37,32 +35,21 @@
               prepend-inner-icon="mdi-magnify"
               label="Ordenar por"
             ></v-select>
-            
+
             <v-spacer></v-spacer>
-            <v-btn-toggle
-              v-model="sortDesc"
-              mandatory
-            >
-              <v-btn
-              class="white"
-                
-                :value="false"
-                small
-              >
-                <v-icon >mdi-arrow-up</v-icon>
+            <v-btn-toggle v-model="sortDesc" mandatory>
+              <v-btn class="white" :value="false" small>
+                <v-icon>mdi-arrow-up</v-icon>
               </v-btn>
-              <v-btn
-              small
-                class="white"
-                
-                :value="true"
-              >
+              <v-btn small class="white" :value="true">
                 <v-icon>mdi-arrow-down</v-icon>
               </v-btn>
-            </v-btn-toggle>        
+            </v-btn-toggle>
           </template>
-          
-          <span class="grey--text ml-2" v-if="$vuetify.breakpoint.mdAndUp">Mostrar</span>
+
+          <span class="grey--text ml-2" v-if="$vuetify.breakpoint.mdAndUp"
+            >Mostrar</span
+          >
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -86,17 +73,19 @@
                 <v-list-item-title>{{ number }}</v-list-item-title>
               </v-list-item>
             </v-list>
-          </v-menu> 
+          </v-menu>
         </v-toolbar>
       </template>
+      <!--slot de loading-->
       <template v-slot:loading>
-          <v-progress-linear
-            color="black"
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>
+        <v-progress-linear
+          color="black"
+          indeterminate
+          rounded
+          height="6"
+        ></v-progress-linear>
       </template>
+      <!--slot donde se inserta cada card-->
       <template v-slot:default="props">
         <v-row no-gutters>
           <v-col
@@ -109,127 +98,112 @@
             max-height="500"
             class="px-2"
           >
-          <v-skeleton-loader
-          type="card-avatar, article, actions"
-          v-if="loading"
-        ></v-skeleton-loader>
-            <v-card
-            :loading="loading"
-            class="mx-auto my-2"
-            max-width="374"
-            
-        >
-            <template slot="progress">
-            <v-progress-linear
-                color="deep-purple"
-                height="10"
-                indeterminate
-            ></v-progress-linear>
-            </template>
-
-            <v-img
-            height="200"
-            :src="item.imagenes[0]"
-            lazy-src="../assets/grey.jpg"
-            >
-            <template v-slot:placeholder>
-              <v-row
-                class="fill-height ma-0"
-                align="center"
-                justify="center"
-              >
-                <v-progress-circular
+            <v-skeleton-loader
+              type="card-avatar, article, actions"
+              v-if="loading"
+            ></v-skeleton-loader>
+            <!--card de anuncio-->
+            <v-card :loading="loading" class="mx-auto my-2" max-width="374">
+              <template slot="progress">
+                <v-progress-linear
+                  color="deep-purple"
+                  height="10"
                   indeterminate
-                  color="grey "
-                ></v-progress-circular>
-              </v-row>
-            </template>
-            </v-img>
+                ></v-progress-linear>
+              </template>
 
-            <v-card-title class="text-truncate mt-n2 mb-n5">{{item.titulo}}</v-card-title>
-            <v-card-text>
-            <v-row
-                align="center"
-                class="mx-0"
-                no-gutters
-            >
-            <v-col>
-              <v-rating
-                :value="Math.floor(Math.random()*10)"
-                color="amber"
-                dense
-                half-increments
-                readonly
-                size="14"
-                ></v-rating>
-            </v-col>
-            <v-col>
-              <div class="my-1 subtitle-1">
-                $ {{item.precio}}
-            </div>
-            </v-col>
-            <v-col>
-              {{momentL(item.creado.seconds)}}
-            </v-col>
-            </v-row>
-          <v-chip
-            class=""
-            color="light"
-            outlined
-            x-small
-          >
-            <v-icon left small>
-              mdi-account
-            </v-icon>
-            {{item.vendedor}}
-          </v-chip>
-            
-            </v-card-text>
-
-            <v-divider class="mx-4"></v-divider>
-
-            <v-card-text class="my-n3">
-            <v-chip-group
-                v-model="selection"
-                active-class="deep-purple accent-4 white--text"
-                column
-            >
-                <v-chip small>{{item.modelo}}</v-chip>
-
-                <v-chip small>{{item.marca}}</v-chip>
-
-                <v-chip small>{{item.sistema}}</v-chip>
-
-            </v-chip-group>
-            </v-card-text>
-
-            <v-card-actions class="grey lighten-3 mt-n4">
-
-              <v-btn  @click="goToAnuncio(item)"
-              class="ml-4"
-              color="secondary lighten-3"
-              small
+              <v-img
+                height="200"
+                :src="item.imagenes[0]"
+                lazy-src="../assets/grey.jpg"
               >
-                Detalles
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
-              <v-spacer></v-spacer>
-              <v-btn 
-              @click="agregarAlCarrito(item)"
-              class="mr-4 "
-              
-               fab
-               dark
-               small
-              color="primary elevation-0">
-                <v-icon dark>mdi-cart-plus</v-icon>
-              </v-btn>
-            </v-card-actions>
-        </v-card>
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey "
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+
+              <v-card-title class="text-truncate mt-n2 mb-n5">{{
+                item.titulo
+              }}</v-card-title>
+              <v-card-text>
+                <v-row align="center" class="mx-0" no-gutters>
+                  <v-col>
+                    <v-rating
+                      :value="Math.floor(Math.random() * 10)"
+                      color="amber"
+                      dense
+                      half-increments
+                      readonly
+                      size="14"
+                    ></v-rating>
+                  </v-col>
+                  <v-col>
+                    <div class="my-1 subtitle-1">$ {{ item.precio }}</div>
+                  </v-col>
+                  <v-col>
+                    {{ momentL(item.creado.seconds) }}
+                  </v-col>
+                </v-row>
+                <v-chip class="" color="light" outlined x-small>
+                  <v-icon left small>
+                    mdi-account
+                  </v-icon>
+                  {{ item.vendedor }}
+                </v-chip>
+              </v-card-text>
+
+              <v-divider class="mx-4"></v-divider>
+
+              <v-card-text class="my-n3">
+                <v-chip-group
+                  v-model="selection"
+                  active-class="deep-purple accent-4 white--text"
+                  column
+                >
+                  <v-chip small>{{ item.modelo }}</v-chip>
+
+                  <v-chip small>{{ item.marca }}</v-chip>
+
+                  <v-chip small>{{ item.sistema }}</v-chip>
+                </v-chip-group>
+              </v-card-text>
+
+              <v-card-actions class="grey lighten-3 mt-n4">
+                <v-btn
+                  @click="goToAnuncio(item)"
+                  class="ml-4"
+                  color="secondary lighten-3"
+                  small
+                >
+                  Detalles
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn
+                  @click="agregarAlCarrito(item)"
+                  class="mr-4 "
+                  fab
+                  dark
+                  small
+                  color="primary elevation-0"
+                >
+                  <v-icon dark>mdi-cart-plus</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
           </v-col>
         </v-row>
       </template>
-
+      <!--Footer paginador-->
       <template v-slot:footer>
         <div class="text-center">
           <v-pagination
@@ -241,104 +215,100 @@
         </div>
       </template>
     </v-data-iterator>
-    <v-snackbar
-          v-model="snackAgregoCart"
-          timeout="2000"
+    <!--snackbar de añadio al carrito-->
+    <v-snackbar v-model="snackAgregoCart" timeout="2000">
+      Articulo añadido al carrito!
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="snackAgregoCart = false"
         >
-           Articulo añadido al carrito! 
-          <template v-slot:action="{ attrs }">
-            <v-btn
-              color="pink"
-              text
-              v-bind="attrs"
-              @click="snackAgregoCart=false"
-            >
-              Cerrar
-            </v-btn>
-          </template>
-      </v-snackbar>
+          Cerrar
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 <script>
-import { mapState,mapMutations} from 'vuex';
-import DialogFilters from '../components/DialogFilters';
-import moment from 'moment';
 
-moment.locale('es');
-  export default {
-      name:'anuncios',
-      components:{DialogFilters},
-      props:{
-          items:Array,
-          loading:Boolean,
-      },
-    data () {
-      return {
-        snackAgregoCart:false,
-        itemsPerPageArray: [4, 8, 12],
-        search: '',
-        filter: {},
-        sortDesc: false,
-        page: 1,
-        itemsPerPage: 8,
-        sortBy: 'marca',
-        keys: [
-          'Marca',
-          'Descripcion',
-          'Estado',
-          'Marca',
-          'Modelo',
-          'Pantalla',
-          'Precio',
-          'Ram',
-          'Rom',
-          'Sistema',
-          'Telefono',
-          'Titulo',
-          'Vendedor',
-          'Creado'
-        ],
+import { mapState, mapMutations } from "vuex";
+import DialogFilters from "../components/DialogFilters";
+import moment from "moment";
+moment.locale("es");
+
+export default {
+  name: "anuncios",
+  components: { DialogFilters },
+  props: {
+    items: Array,
+    loading: Boolean,
+  },
+  data() {
+    return {
+      snackAgregoCart: false,
+      itemsPerPageArray: [4, 8, 12],
+      search: "",
+      filter: {},
+      sortDesc: false,
+      page: 1,
+      itemsPerPage: 8,
+      sortBy: "marca",
+      keys: [
+        "Marca",
+        "Descripcion",
+        "Estado",
+        "Marca",
+        "Modelo",
+        "Pantalla",
+        "Precio",
+        "Ram",
+        "Rom",
+        "Sistema",
+        "Telefono",
+        "Titulo",
+        "Vendedor",
+        "Creado",
+      ],
       selection: 1,
-      }
+    };
+  },
+  computed: {
+    ...mapState(["agrego"]),
+    numberOfPages() {
+      return Math.ceil(this.items.length / this.itemsPerPage);
     },
-    computed: {
-      ...mapState(['agrego']),
-      numberOfPages () {
-        return Math.ceil(this.items.length / this.itemsPerPage)
-      },
-      filteredKeys () {
-        return this.keys.filter(key => key !== 'Name')
-      }
+    filteredKeys() {
+      return this.keys.filter((key) => key !== "Name");
     },
-    methods: {
-        ...mapMutations(['addToCart']),
-        goToAnuncio(anuncio){
-            //this.setAnuncioDetalle(anuncio);
-            this.$router.push({ name: 'Anuncio', params: { id: anuncio.id} });
-            //let routeData = this.$router.resolve({name: 'Anuncio'});
-            //window.open(routeData.href, '_blank');
-        },
-      updateItemsPerPage (number) {
-        this.itemsPerPage = number
-      },
-      momentL(s){
-         return moment(s,'X').fromNow();
-      },
-      actualizarFiltros(nuevo){
-        this.$emit('cambio',nuevo);
-      },
-      agregarAlCarrito(item){
-        this.addToCart(item);
-        this.snackAgregoCart=true;
-      }
+  },
+  methods: {
+    ...mapMutations(["addToCart"]),
+    /**metodo cuando da click en detalle */
+    goToAnuncio(anuncio) {
+      this.$router.push({ name: "Anuncio", params: { id: anuncio.id } });
     },
-    watch:{ //para que vaya arriba
-      page:function( val){
-        this.$vuetify.goTo(0)
-      }
-    }
-  }
+    /**metodo del data iterator */
+    updateItemsPerPage(number) {
+      this.itemsPerPage = number;
+    },
+    /**metodo que calcula el tiempo*/
+    momentL(s) {
+      return moment(s, "X").fromNow();
+    },
+    /**metodo cuando agrega articulo al carrito */
+    agregarAlCarrito(item) {
+      this.addToCart(item);
+      this.snackAgregoCart = true;
+    },
+  },
+  watch: {
+    //para que vaya hacis arriba
+    page: function(val) {
+      this.$vuetify.goTo(0);
+    },
+  },
+};
 </script>
-<style>
-
-</style>
+<style></style>

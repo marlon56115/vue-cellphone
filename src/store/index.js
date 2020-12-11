@@ -20,8 +20,7 @@ export default new Vuex.Store({
     marcas: ['Samsung', 'Apple', 'Huawei', 'LG', 'Xiaomi', 'Google'],
     sistemas: ['Android', 'Ios', 'Windows Phone'],
     estados: ['Nuevo', 'Usado', 'Semi-usado', 'Dañado'],
-    modelos: [
-      {
+    modelos: [{
         marca: 'Xiaomi',
         modelo: 'Mi note lite'
       },
@@ -89,61 +88,53 @@ export default new Vuex.Store({
         marca: 'Apple',
         modelo: 'Iphone 7 plus'
       }
-      
+
     ]
 
   },
   mutations: {
+    /**para actualizar filtros */
     actualizarFiltros(state, nuevo) {
       state.marcasSelected = nuevo.localMarca;
       state.sistemasSelected = nuevo.localSistema;
       state.estadosSelected = nuevo.localEstados;
       state.precioSelected = nuevo.localPrecio;
     },
+    /**se ejcuta cuando agrego un nuevo anuncio */
     agregoChange(state) {
       state.agrego = !state.agrego;
     },
+    /**se ejecuta cuando añade articulo al carrito */
     addToCart(state, anuncio) {
-      //state.carrito.push(anuncio);
-      //anuncio.cantidad=undefined; //añado la propiedad cantidad
-      //anuncio.subtotal=undefined; //añado la propiedad subtotal
       var nuevoArray = [];
       nuevoArray = state.carrito.filter(an => an.id == anuncio.id);
-      // console.log(nuevoArray.length);
+      //si el articulo no existia en el carrito se añade
       if (nuevoArray.length == 0) {
         anuncio.cantidad = 1;
         anuncio.subtotal = anuncio.precio;
         state.carrito.push(anuncio);
         state.carrito = state.carrito.slice();
-        //console.log(state.carrito);
-        //console.log(state.carrito);
       } else {
+        //si el articulo ya existia en el carrito solo se aumenta la cantidad en 1
         state.carrito.forEach(an => {
           if (an.id === anuncio.id) {
-            //console.log(an.cantidad);
             an.cantidad = an.cantidad + 1;
             an.subtotal = an.cantidad * an.precio;
             state.carrito = state.carrito.slice();
-            //console.log(an);
           }
         });
-        //state.carrito.find(an=>an.id===anuncio.id).cantidad+=1;
-        //state.carrito.find(an=>an.id===anuncio.id).subtotal=state.carrito.find(an=>an.id===anuncio.id).cantidad*state.carrito.find(an=>an.id===anuncio.id).precio;
       }
-      //anuncio.cantidad=nuevoArray.length;
-      //anuncio.subtotal=anuncio.cantidad*anuncio.precio;
-      //state.carrito.push(anuncio);
-      //console.log(state.carrito);
     },
+    /**metodo cuando quite un articulo del carrito */
     quitToCart(state, anuncio) {
       state.carrito.forEach((an, i) => {
         if (an.id === anuncio.id) {
+          //si la cantidad del articulo es mayor a 1 solo la disminuye
           if (an.cantidad > 1) {
             an.cantidad = an.cantidad - 1;
             state.carrito = state.carrito.slice();
-            console.log(state.carrito);
           } else if (an.cantidad == 1) {
-            //console.log('llego a 0');
+            //si la cantidad del articulo es 1, lo elimina
             state.carrito.splice(i, 1);
             state.carrito = state.carrito.slice();
           }
@@ -155,25 +146,21 @@ export default new Vuex.Store({
 
   },
   getters: {
+    /**devuelve el total de articulos del carrito*/
     getTotalCarrito(state) {
       var total = 0;
       state.carrito.forEach(an => {
         total = total + an.cantidad;
       })
-      //console.log(total);
-      //state.carrito=state.carrito.slice();
       return total;
     },
+    /**devuelve el total a pagar de articulos del carrito */
     getTotal(state) {
       var total = 0;
       state.carrito.forEach(item => {
         total += item.cantidad * item.precio;
       });
-
       return total;
-    },
-    getCarrito: function (state) {
-      return state.carrito;
     }
   },
   modules: {},

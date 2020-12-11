@@ -1,14 +1,8 @@
 <template>
+  <!--Modal mientras este guardando-->
   <div class="text-center">
-    <v-dialog
-      v-model="dialog"
-      hide-overlay
-      persistent
-      width="300"
-    >
-      <v-card
-        dark
-      >
+    <v-dialog v-model="dialog" hide-overlay persistent width="300">
+      <v-card dark>
         <v-card-text>
           Guardando Anuncio
           <v-progress-linear
@@ -24,13 +18,10 @@
 
 <script>
 export default {
-    name:'loadingmodal',
-    props:{
-        dialog:Boolean
-    }
-}
+  name: "loadingmodal",
+  props: {
+    dialog: Boolean,
+  },
+};
 </script>
 
-<style>
-
-</style>

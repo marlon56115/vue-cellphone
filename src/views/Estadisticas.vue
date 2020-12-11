@@ -4,9 +4,7 @@
       <v-row>
         <v-col cols="12" sm="6">
           <v-card>
-            <v-card-title>
-              Marcas mas vendidas
-            </v-card-title>
+            <v-card-title> Marcas mas vendidas </v-card-title>
             <v-card-text>
               <Chart />
             </v-card-text>
@@ -14,27 +12,23 @@
         </v-col>
         <v-col cols="12" sm="6">
           <v-card>
-            <v-card-title>
-              Modelos mas vendidas
-            </v-card-title>
+            <v-card-title> Modelos mas vendidas </v-card-title>
             <v-card-text>
-              <Chart2/>
+              <Chart2 />
             </v-card-text>
           </v-card>
         </v-col>
         <v-col cols="12" sm="6">
           <v-card>
             <v-card-text>
-              <Chart3
-              />
+              <Chart3 />
             </v-card-text>
           </v-card>
         </v-col>
         <v-col cols="12" sm="6">
           <v-card>
             <v-card-text>
-              <Chart4
-              />
+              <Chart4 />
             </v-card-text>
           </v-card>
         </v-col>
@@ -56,15 +50,15 @@ import { storage, db } from "../database/firebase";
 export default {
   name: "anuncio",
   components: {
-    Chart,Chart2,Chart3,Chart4
+    Chart,
+    Chart2,
+    Chart3,
+    Chart4,
   },
-  data: () => ({
-    
-  }),
+  data: () => ({}),
   created() {
     this.$vuetify.goTo(0);
-  }
- 
+  },
 };
 </script>
 

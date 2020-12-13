@@ -20,11 +20,11 @@ export default {
     this.gradient2.addColorStop(1, "rgba(0, 231, 255, 0)");
     this.renderChart(
       {
-        labels: ["Books", "Magazines", "Newspapers"],
+        labels: ["Marlon", "Wilfredo", "Jose","Katherinne"],
         datasets: [
           {
             backgroundColor: [this.gradient, this.gradient2, "#00D8FF"],
-            data: [40, 20, 10]
+            data: [40, 20, 10,5]
           }
         ]
       },

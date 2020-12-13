@@ -28,17 +28,17 @@ export default {
     this.renderChart(
       {
         labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July"
+          "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Agosto"
         ],
         datasets: [
           {
-            label: "Data One",
+            label: "Samsung Galaxy s20 Ultra",
             borderColor: "#FC2525",
             pointBackgroundColor: "white",
             borderWidth: 1,
@@ -47,7 +47,7 @@ export default {
             data: [40, 39, 10, 40, 39, 80, 40]
           },
           {
-            label: "Data Two",
+            label: "Huawe P40 Pro",
             borderColor: "#05CBE1",
             pointBackgroundColor: "white",
             pointBorderColor: "white",
@@ -57,7 +57,17 @@ export default {
           }
         ]
       },
-      { responsive: true, maintainAspectRatio: false }
+      { responsive: true, maintainAspectRatio: false,
+         scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      }
+      }
     );
   }
 };

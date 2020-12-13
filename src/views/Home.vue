@@ -78,17 +78,27 @@ export default {
     insertarImagenes(anunciosLocal) {
       anunciosLocal.forEach(async (item) => {
         //recorremos los anuncios
-        const list = await ref.child("S_" + item.id + "/").listAll();
-        list.items.forEach(async (imgRef) => {
-          //obtenemos el id de cada item para obtener le referencia de  la carpeta de sus fotos
-          const url = await imgRef.getDownloadURL();
-          for (let index = 0; index < anunciosLocal.length; index++) {
-            //agregamos la foto a cada objeto de anuncios
-            if (anunciosLocal[index].id === item.id) {
-              anunciosLocal[index].imagenes.push(url);
+        try {
+            var list = await ref.child("S_" + item.id + "/").listAll();
+        } catch (error) {
+          console.log(error);
+        }
+
+         list.items.forEach(async (imgRef) => {
+            //obtenemos el id de cada item para obtener le referencia de  la carpeta de sus fotos
+            try {
+              var url = await imgRef.getDownloadURL();
+            } catch (error) {
+              console.log(error);
             }
-          }
-        });
+
+            for (let index = 0; index < anunciosLocal.length; index++) {
+              //agregamos la foto a cada objeto de anuncios
+              if (anunciosLocal[index].id === item.id) {
+                anunciosLocal[index].imagenes.push(url);
+              }
+            }
+          });
       });
     },
   },

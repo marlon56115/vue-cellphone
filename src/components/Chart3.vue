@@ -7,18 +7,18 @@ export default {
     this.renderChart(
       {
         labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July"
+          "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Agosto"
         ],
         datasets: [
           {
-            label: "Data 1",
-            data: [2, 10, 5, 9, 0, 6, 20],
+            label: "Ventas globales",
+            data: [200, 150, 100, 256, 212, 158, 163],
             backgroundColor: "transparent",
             borderColor: "rgba(1, 116, 188, 0.50)",
             pointBackgroundColor: "rgba(171, 71, 188, 1)"
@@ -30,8 +30,17 @@ export default {
         maintainAspectRatio: false,
         title: {
           display: true,
-          text: "My Data"
-        }
+          text: "Unidades"
+        },
+         scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      }
       }
     );
   }

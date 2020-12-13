@@ -12,7 +12,7 @@
         </v-col>
         <v-col cols="12" sm="6">
           <v-card>
-            <v-card-title> Modelos mas vendidas </v-card-title>
+            <v-card-title> Modelos mas vendidos </v-card-title>
             <v-card-text>
               <Chart2 />
             </v-card-text>
@@ -20,6 +20,7 @@
         </v-col>
         <v-col cols="12" sm="6">
           <v-card>
+            <v-card-title> Ventas globales </v-card-title>
             <v-card-text>
               <Chart3 />
             </v-card-text>
@@ -27,6 +28,7 @@
         </v-col>
         <v-col cols="12" sm="6">
           <v-card>
+            <v-card-title> Anunciantes del mes </v-card-title>
             <v-card-text>
               <Chart4 />
             </v-card-text>

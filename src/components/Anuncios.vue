@@ -114,7 +114,7 @@
 
               <v-img
                 height="200"
-                :src="item.imagenes[0]"
+                :src='item.imagenes[0]'
                 lazy-src="../assets/grey.jpg"
               >
                 <template v-slot:placeholder>
@@ -131,9 +131,9 @@
                 </template>
               </v-img>
 
-              <v-card-title class="text-truncate mt-n2 mb-n5">{{
-                item.titulo
-              }}</v-card-title>
+              <v-card-title class=" mt-n2 mb-n9">
+               <p class="text-truncate"> {{item.titulo}}</p>
+              </v-card-title>
               <v-card-text>
                 <v-row align="center" class="mx-0" no-gutters>
                   <v-col>
@@ -174,6 +174,7 @@
                   <v-chip small>{{ item.marca }}</v-chip>
 
                   <v-chip small>{{ item.sistema }}</v-chip>
+                  {{ item.imagenes.length}}
                 </v-chip-group>
               </v-card-text>
 
@@ -301,7 +302,7 @@ export default {
     agregarAlCarrito(item) {
       this.addToCart(item);
       this.snackAgregoCart = true;
-    },
+    }
   },
   watch: {
     //para que vaya hacis arriba

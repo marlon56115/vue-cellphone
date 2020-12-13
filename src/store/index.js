@@ -120,6 +120,7 @@ export default new Vuex.Store({
           if (an.id === anuncio.id) {
             an.cantidad = an.cantidad + 1;
             an.subtotal = an.cantidad * an.precio;
+            an.subtotal = (an.subtotal).toFixed(2);
             state.carrito = state.carrito.slice();
           }
         });
@@ -132,6 +133,8 @@ export default new Vuex.Store({
           //si la cantidad del articulo es mayor a 1 solo la disminuye
           if (an.cantidad > 1) {
             an.cantidad = an.cantidad - 1;
+            an.subtotal = an.cantidad * an.precio;
+            an.subtotal = (an.subtotal).toFixed(2);
             state.carrito = state.carrito.slice();
           } else if (an.cantidad == 1) {
             //si la cantidad del articulo es 1, lo elimina
@@ -160,7 +163,7 @@ export default new Vuex.Store({
       state.carrito.forEach(item => {
         total += item.cantidad * item.precio;
       });
-      return total;
+      return total.toFixed(2);
     }
   },
   modules: {},

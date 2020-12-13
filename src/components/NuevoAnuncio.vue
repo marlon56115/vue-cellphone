@@ -408,7 +408,7 @@ export default {
       ],
       precioReglas: [
         (v) => !!v || "Ingrese el precio!",
-        (v) => (!!v ? v > 0 || "Precio invalido!" : ""),
+        (v) => (!!v ? v > 0&&v<1000000 || "Precio invalido!" : ""),
       ],
       imagenReglas: [
         (img) => !img || img.size < 10000000 || "Tamaño maximo de 5 mb!",

@@ -174,7 +174,6 @@
                   <v-chip small>{{ item.marca }}</v-chip>
 
                   <v-chip small>{{ item.sistema }}</v-chip>
-                  {{ item.imagenes.length}}
                 </v-chip-group>
               </v-card-text>
 

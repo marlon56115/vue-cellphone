@@ -127,11 +127,16 @@
       </v-row>
     </v-container>
     <!--snackbar de agrego al carrito-->
-    <v-snackbar v-model="snackAgregoCart" timeout="2000">
+    <v-snackbar v-model="snackAgregoCart" timeout="2000" right
+      top
+      color="primary">
+       <v-icon left>
+        mdi-cart
+      </v-icon>
       Articulo añadido al carrito!
       <template v-slot:action="{ attrs }">
         <v-btn
-          color="pink"
+          color="dark"
           text
           v-bind="attrs"
           @click="snackAgregoCart = false"

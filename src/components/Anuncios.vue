@@ -13,18 +13,24 @@
     >
       <!-- Header con filtros-->
       <template v-slot:header>
-        <v-toolbar class=" elevation-0 grey lighten-4 ">
-          <v-text-field
-            dense
-            v-model="search"
-            clearable
-            flat
-            solo-inverted
-            hide-details
-            prepend-inner-icon="mdi-magnify"
-          ></v-text-field>
-          <template v-if="$vuetify.breakpoint.mdAndUp">
-            <v-spacer></v-spacer>
+        <v-row no-gutters class="mb-5">
+          <v-col cols="12" sm="4">
+            <v-text-field
+              dense
+              v-model="search"
+              clearable
+              flat
+              solo-inverted
+              hide-details
+              prepend-inner-icon="mdi-magnify"
+              class="mr-sm-2"
+            ></v-text-field>
+          </v-col>
+          <v-col
+            cols="5"
+            sm="4"
+            class=" d-flex align-center justify-center mt-2 mt-sm-0"
+          >
             <v-select
               dense
               v-model="sortBy"
@@ -32,11 +38,15 @@
               solo-inverted
               hide-details
               :items="keys"
-              prepend-inner-icon="mdi-magnify"
               label="Ordenar por"
+              prepend-inner-icon="mdi-swap-vertical"
             ></v-select>
-
-            <v-spacer></v-spacer>
+          </v-col>
+          <v-col
+            cols="4"
+            sm="2"
+            class=" d-flex align-center justify-center mt-2 mt-sm-0"
+          >
             <v-btn-toggle v-model="sortDesc" mandatory>
               <v-btn class="white" :value="false" small>
                 <v-icon>mdi-arrow-up</v-icon>
@@ -45,37 +55,41 @@
                 <v-icon>mdi-arrow-down</v-icon>
               </v-btn>
             </v-btn-toggle>
-          </template>
-
-          <span class="grey--text ml-2" v-if="$vuetify.breakpoint.mdAndUp"
-            >Mostrar</span
+          </v-col>
+          <v-col
+            cols="3"
+            sm="2"
+            class=" d-flex align-center justify-center mt-2 mt-sm-0"
           >
-          <v-menu offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                dark
-                text
-                color="primary"
-                class="ml-2"
-                v-bind="attrs"
-                v-on="on"
-              >
-                {{ itemsPerPage }}
-                <v-icon>mdi-chevron-down</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="(number, index) in itemsPerPageArray"
-                :key="index"
-                @click="updateItemsPerPage(number)"
-              >
-                <v-list-item-title>{{ number }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-toolbar>
+            <span class="grey--text ml-2" v-if="$vuetify.breakpoint.mdAndUp"
+              >Articulos
+            </span>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  small
+                  class=" white elevation-0"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  {{ itemsPerPage }}
+                  <v-icon>mdi-chevron-down</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(number, index) in itemsPerPageArray"
+                  :key="index"
+                  @click="updateItemsPerPage(number)"
+                >
+                  <v-list-item-title>{{ number }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-col>
+        </v-row>
       </template>
+
       <!--slot de loading-->
       <template v-slot:loading>
         <v-progress-linear
@@ -85,6 +99,7 @@
           height="6"
         ></v-progress-linear>
       </template>
+      
       <!--slot donde se inserta cada card-->
       <template v-slot:default="props">
         <v-row no-gutters>
@@ -103,6 +118,7 @@
               v-if="loading"
             ></v-skeleton-loader>
             <!--card de anuncio-->
+
             <v-card :loading="loading" class="mx-auto my-2" max-width="374">
               <template slot="progress">
                 <v-progress-linear
@@ -112,27 +128,28 @@
                 ></v-progress-linear>
               </template>
 
-              <v-img
-                height="200"
-                :src='item.imagenes[0]'
-                lazy-src="../assets/grey.jpg"
-              >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="grey "
-                    ></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
-
+              <router-link :to="'/anuncio/' + item.id">
+                <v-img
+                  height="200"
+                  :src="item.imagenes[0]"
+                  lazy-src="../assets/grey.jpg"
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey "
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </router-link>
               <v-card-title class=" mt-n2 mb-n9">
-               <p class="text-truncate"> {{item.titulo}}</p>
+                <p class="text-truncate">{{ item.titulo }}</p>
               </v-card-title>
               <v-card-text>
                 <v-row align="center" class="mx-0" no-gutters>
@@ -216,11 +233,20 @@
       </template>
     </v-data-iterator>
     <!--snackbar de añadio al carrito-->
-    <v-snackbar v-model="snackAgregoCart" timeout="2000">
+    <v-snackbar
+      v-model="snackAgregoCart"
+      timeout="2000"
+      right
+      top
+      color="primary"
+    >
+      <v-icon left>
+        mdi-cart
+      </v-icon>
       Articulo añadido al carrito!
       <template v-slot:action="{ attrs }">
         <v-btn
-          color="pink"
+          color="dark"
           text
           v-bind="attrs"
           @click="snackAgregoCart = false"
@@ -232,7 +258,6 @@
   </v-container>
 </template>
 <script>
-
 import { mapState, mapMutations } from "vuex";
 import DialogFilters from "../components/DialogFilters";
 import moment from "moment";
@@ -251,6 +276,7 @@ export default {
       itemsPerPageArray: [4, 8, 12],
       search: "",
       filter: {},
+      dialog: false,
       sortDesc: false,
       page: 1,
       itemsPerPage: 8,
@@ -301,7 +327,7 @@ export default {
     agregarAlCarrito(item) {
       this.addToCart(item);
       this.snackAgregoCart = true;
-    }
+    },
   },
   watch: {
     //para que vaya hacis arriba

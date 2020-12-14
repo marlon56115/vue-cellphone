@@ -305,11 +305,14 @@
     <LoadingModal :dialog="guardando" />
     <div class="text-center ma-2">
       <!--snackbar de agrego anuncio-->
-      <v-snackbar v-model="snackbarAgrego">
+      <v-snackbar v-model="snackbarAgrego" right top color="primary">
+        <v-icon left>
+        mdi-check
+      </v-icon>
         Anuncio agregado con exito!
         <template v-slot:action="{ attrs }">
           <v-btn
-            color="pink"
+            color="dark"
             text
             v-bind="attrs"
             @click="snackbarAgrego = false"
@@ -319,11 +322,14 @@
         </template>
       </v-snackbar>
       <!--snacknar de error de formulario-->
-      <v-snackbar v-model="snackbarError" timeout="2000">
+      <v-snackbar v-model="snackbarError" timeout="2000" right top color="red">
+          <v-icon left>
+          mdi-alert-circle
+        </v-icon>
         Faltan campos por rellenar!
         <template v-slot:action="{ attrs }">
           <v-btn
-            color="pink"
+            color="dark"
             text
             v-bind="attrs"
             @click="snackbarError = false"

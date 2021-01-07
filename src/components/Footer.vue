@@ -17,7 +17,10 @@
       </v-card-text>
 
       <v-card-text class="white--text pt-0">
-        Desarrollado por <strong>Marlon Wilfredo Guerra Ramirez</strong>
+        Desarrollado por: <strong>Marlon Wilfredo Guerra Ramirez GR18045</strong>
+      </v-card-text>
+      <v-card-text class="white--text pt-0">
+        Fundamentos de la programaciòn en internet 2020 <strong>Universidad de El Salvador</strong>
       </v-card-text>
 
       <v-divider></v-divider>

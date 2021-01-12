@@ -21,6 +21,7 @@
           <template v-slot:item.titulo="{ item }">
             <v-row >
               <v-col cols="12" md="3">
+                <router-link :to="'anuncio/'+item.id">
                 <v-img
                   max-width="175"
                   max-height="100"
@@ -40,9 +41,12 @@
                     </v-row>
                   </template>
                 </v-img>
+            </router-link>
               </v-col>
               <v-col cols="12" md="6">
-                {{ item.titulo }}
+                <router-link :to="'anuncio/'+item.id" class="link">
+                  {{ item.titulo }}
+                </router-link>
               </v-col>
               <v-divider class="float-right" vertical ></v-divider>
             </v-row>
@@ -193,4 +197,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.link {
+  text-decoration: none;
+}
+</style>

@@ -17,7 +17,7 @@
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
-       <!--Contenido del formulario-->
+       <!--Contenido del formulari-->
       <v-card-text>
         <v-container>
            <!--Primer formulario-->
